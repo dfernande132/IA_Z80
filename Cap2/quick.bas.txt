@@ -1,0 +1,43 @@
+10 REM --- LABORATORIO DE RENDIMIENTO: QUICK SORT ---
+15 RUN AT 3: REM Ponemos el Z80 a 28 MHz.
+20  LET n = 50
+30  DIM a(n)
+40  REM LLAMAMOS A LA FUNCION QUE NOS GENERA NUMEROS ALEATORIOS
+50  PROC genRand(n)
+60  PRINT "Ordenando "; n; " elementos..."
+70 LET tinicio= TIME
+80 REM LLAMAMOS A LA FUNCION DE ORDENACION
+90  PROC quickSort(1,n)
+100 LET tfinal = TIME
+120 LET transcurrido = (tfinal - tinicio) / 50
+130 PRINT "Completado en ";transcurrido;" segundos."
+140 REM --- COMPROBAMOS SI EL ARRAY ESTA ORDENADO ---
+145 LET OK = 1
+150 FOR i=1 TO n-1
+160 IF a(i) > a(i+1) THEN LET OK =0
+170 NEXT i
+180 IF OK=1 THEN PRINT "Array correctamente ordenado.": ELSE PRINT "Error en el ordenamiento."
+200 PAUSE 0: STOP
+
+2000 DEFPROC genRand(n)
+2010   LOCAL i
+2020   FOR i = 1 TO n: LET a(i) = INT(RND * 1000): NEXT i
+2030 ENDPROC
+
+5000 DEFPROC quickSort(low, high)
+5010   LOCAL p
+5020   IF low >= high THEN ENDPROC
+5030   PROC partition(low, high) TO p
+5040   PROC quickSort(low, p - 1)
+5050   PROC quickSort(p + 1, high)
+5060 ENDPROC
+
+5100 DEFPROC partition(low, high)
+5110   LOCAL piv, i, j, t
+5120   LET piv = a(high)
+5130   LET i = low - 1
+5140   FOR j = low TO high - 1
+5150     IF a(j) <= piv THEN LET i = i + 1: LET t = a(i): LET a(i) = a(j): LET a(j) = t
+5160   NEXT j
+5170   LET t = a(i + 1): LET a(i + 1) = a(high): LET a(high) = t
+5180   ENDPROC = i + 1

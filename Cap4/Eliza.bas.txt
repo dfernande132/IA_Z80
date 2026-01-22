@@ -1,0 +1,239 @@
+  10 REM ==========================================
+  20 REM    ELIZA SINCLAIR BASIC VERSION
+  30 REM ==========================================
+  40 PAPER 0:BORDER 0:INK 4:CLS:PRINT AT 10,10; "CARGANDO DATOS..."
+  50 RANDOMIZE
+  60 GO SUB 1000
+  70 PAPER 7:BORDER 7: INK 1: CLS: PRINT "ELIZA (ZX SPECTRUM)"
+  80 PRINT "ESCRIBE FIN PARA SALIR." : PRINT
+
+ 100 INK 3: INPUT "TU> ";u$
+ 110 LET s$=u$: GO SUB 3000
+ 120 IF s$="FIN" OR s$="ADIOS" THEN INK 0: PRINT "- ADIOS.": STOP
+ 130 IF s$="" THEN GO TO 100
+
+ 140 GO SUB 4000
+ 150 INK 0: INVERSE 1: PRINT " ";s$: INVERSE 0
+ 155 LET t$=a$: GO SUB 8000
+ 160 INK 0: PRINT "- ";t$
+ 170 GO TO 100
+
+1000 REM ==========================================
+1010 REM 1000) TABLAS ELIZA DESDE DATA
+1020 REM - PATRONES:  "PREFIJO","RESP1","RESP2"
+1030 REM   PREFIJO = texto antes del comodin (*)
+1040 REM - FALLBACKS: "RESPUESTA"
+1050 REM ==========================================
+
+1060 REM --- VALORES DEL NUMERO DE PATRONES ---
+1070 LET nPat=11
+1080 LET nFb=4
+
+1090 REM --- LONGITUDES FIJAS ---
+1100 LET PFXLEN=30
+1110 LET RESPLEN=80
+1120 LET FBLEN=60
+
+1130 REM --- DIMENSIONADO EXACTO ---
+1140 DIM pPre$(nPat,PFXLEN)
+1150 DIM r$(nPat,2,RESPLEN): DIM rCnt(nPat)
+1160 DIM fb$(nFb,FBLEN)
+
+1170 REM 1) CARGA PATRONES (SIEMPRE 2 RESPUESTAS)
+1180 RESTORE 1800
+1190 FOR p=1 TO nPat
+1200   READ pre$: READ r1$: READ r2$
+1210   LET pPre$(p)=pre$
+1220   LET rCnt(p)=2
+1230   LET r$(p,1)=r1$
+1240   LET r$(p,2)=r2$
+1250 NEXT p
+
+1260 REM 2) CARGA FALLBACKS
+1270 RESTORE 1900
+1280 FOR i=1 TO nFb
+1290   READ f$
+1300   LET fb$(i)=f$
+1310 NEXT i
+
+1320 RETURN
+
+1800 REM ==========================================
+1810 REM             PATRONES 
+1820 REM      "PREFIJO","RESP1","RESP2"
+1830 REM  PREFIJO = texto antes del comodin (*)
+1840 REM ==========================================
+1850 DATA "NO ME SIENTO","POR QUE NO TE SIENTES *?","DESDE CUANDO NO TE SIENTES *?"
+1851 DATA "ME SIENTO","DESDE CUANDO TE SIENTES *?","POR QUE TE SIENTES *?"
+1852 DATA "NO PUEDO","QUE TE IMPIDE *?","CREES QUE PODRIAS * SI LO INTENTARAS?"
+1853 DATA "MI MADRE","HABLA MAS DE TU MADRE.","COMO TE HACE SENTIR TU MADRE?"
+1854 DATA "MI PADRE","HABLA MAS DE TU PADRE.","COMO ES TU RELACION CON TU PADRE?"
+1855 DATA "SIEMPRE","DE VERDAD SIEMPRE?","PUEDES PENSAR EN UN EJEMPLO CONCRETO?"
+1856 DATA "NUNCA","NUNCA? NI UNA SOLA VEZ?","POR QUE CREES QUE NUNCA?"
+1857 DATA "YO","POR QUE DICES QUE TU *?","PUEDES EXPLICAR ESO DE QUE TU *?"
+1858 DATA "TRISTE","POR QUE TE SIENTES ASI?","PUEDES HABLARME MAS DE TU TRISTEZA?"
+1859 DATA "HOLA","HOLA, ME ALEGRA SABER DE TI","BIENVENIDO, CUENTAME"
+1860 DATA "QUIERO","QUE SIGNIFICA QUERER *?","POR QUE QUIERES *?"
+
+1900 REM ==========================================
+1910 REM DATA FALLBACKS (nFb=3)
+1920 REM ==========================================
+1930 DATA "SIGUE DESARROLLANDOTE, POR FAVOR."
+1931 DATA "ENTIENDO. PUEDES EXPLICAR MAS?"
+1932 DATA "COMO TE HACE SENTIR ESO?"
+1933 DATA "ESO ES INTERESANTE. CUENTAME MAS."
+
+
+2000 REM ==========================================
+2010 REM  BUSCA SUBCADENA
+2020 REM Entrada : hay$, need$
+2030 REM Salida  : pos (0 si no)
+2040 REM ==========================================
+2050 LET pos=0
+2060 LET lh=LEN(hay$): LET ld=LEN(need$)
+2070 IF ld=0 THEN LET pos=1: RETURN
+2080 IF ld>lh THEN RETURN
+2090 FOR i=1 TO lh-ld+1
+2100   IF hay$(i TO i+ld-1)=need$ THEN LET pos=i: RETURN
+2110 NEXT i
+2120 RETURN
+
+
+3000 REM ==========================================
+3010 REM  NORMALIZACION (s$ -> s$)
+3020 REM - MAYUSCULAS
+3030 REM - QUITA SIGNOS -> ESPACIO
+3040 REM - COLAPSA ESPACIOS
+3050 REM - TRIM IZQ/DER
+3060 REM ==========================================
+3070 LET bad$=".,;:!?()[]'"+CHR$(34)
+3080 LET t$="": LET prevSp=0
+3090 FOR i=1 TO LEN(s$)
+3100   LET c$=s$(i)
+3110   LET a=CODE c$
+3120   IF a>=97 AND a<=122 THEN LET a=a-32: LET c$=CHR$(a)
+3130   LET hit=0
+3140   FOR j=1 TO LEN(bad$)
+3150     IF bad$(j)=c$ THEN LET hit=1
+3160   NEXT j
+3170   IF hit=1 THEN LET c$=" "
+3180   IF c$=" " THEN IF prevSp=0 THEN LET t$=t$+" ": LET prevSp=1
+3190   IF c$<>" " THEN LET t$=t$+c$: LET prevSp=0
+3200 NEXT i
+3210 LET s$=t$
+
+3220 REM TRIM IZQ
+3230 REPEAT : WHILE LEN s$>0 AND s$(1)=" "
+3240   LET s$=s$(2 TO )
+3250 REPEAT UNTIL 0
+
+3260 REM TRIM DER
+3270 REPEAT : WHILE LEN s$>0 AND s$(LEN s$)=" "
+3280   LET s$=s$(1 TO LEN s$-1)
+3290 REPEAT UNTIL 0
+3300 RETURN
+
+
+4000 REM ==========================================
+4010 REM  GENERAR RESPUESTA (usa s$, devuelve a$)
+4020 REM ==========================================
+4040 LET a$=""
+4050 LET sp2$=" "+s$+" "
+4060 LET found=0: LET cap$=""
+
+4070 FOR p=1 TO nPat
+4080   LET t$=pPre$(p): GO SUB 8000
+4090   LET need$=" "+t$+" "
+4100   LET hay$=sp2$: GO SUB 2000
+4110   IF pos>0 THEN LET cap$=sp2$(pos+LEN need$ TO ) : LET found=1 : GO TO 4500
+4160 NEXT p
+
+4170 IF found=0 THEN GO SUB 7000: RETURN
+
+4500 REM LIMPIA CAPTURA (TRIM) SEGURO
+4505 IF LEN cap$=0 THEN GO TO 4570
+
+4510 IF cap$(1)<>" " THEN GO TO 4540
+4520 LET cap$=cap$(2 TO )
+4530 GO TO 4505
+
+4540 IF LEN cap$=0 THEN GO TO 4570
+4545 IF cap$(LEN cap$)<>" " THEN GO TO 4570
+4550 IF LEN cap$=1 THEN LET cap$="": GO TO 4570
+4555 LET cap$=cap$(1 TO LEN cap$-1)
+4560 GO TO 4540
+
+4570 REM CAMBIO DE PERSONA (cap$ -> cap2$)
+4580 GO SUB 5000
+
+4590 REM ELIGE PLANTILLA + INSERTA *
+4600 LET ri=1+INT(RND*rCnt(p))
+4610 LET t$=r$(p,ri)
+4620 GO SUB 6000
+4630 RETURN
+
+5000 REM ==========================================
+5010 REM CAMBIO DE PERSONA (cap$ -> cap2$)
+5020 REM ==========================================
+5030 LET cap2$=""
+5040 LET tmp$=cap$+" "
+5050 LET w$="": LET i=1
+
+5060 REPEAT: WHILE i<=LEN(tmp$)
+5070   LET c$=tmp$(i)
+
+5080 REM ACUMULA LETRAS
+5090   IF c$<>" " THEN LET w$=w$+c$: GO TO 5197
+
+5100 REM ESPACIO: SI NO HAY PALABRA, SIGUE
+5110   IF w$="" THEN GO TO 5197
+
+5120 REM MAPEO DE PRONOMBRES (PALABRA COMPLETA)
+5130   LET w2$=w$
+5140   IF w$="YO" THEN LET w2$="TU"
+5150   IF w$="MI" THEN LET w2$="TU"
+5160   IF w$="ME" THEN LET w2$="TE"
+5170 IF w$="CONMIGO" THEN LET w2$="CONTIGO"
+5180 IF w$="TU" THEN LET w2$="MI"
+5185 IF w$="TE" THEN LET w2$="ME"
+5186 IF w$="CONTIGO" THEN LET w2$="CONMIGO"
+
+5195   LET cap2$=cap2$+w2$+" "
+5196   LET w$=""
+5197   LET i=i+1
+5200 REPEAT UNTIL 0
+
+5210 REM TRIM FINAL
+5215 IF LEN cap2$=0 THEN RETURN
+5220 IF cap2$(LEN cap2$)<>" " THEN RETURN
+5230 LET cap2$=cap2$(1 TO LEN cap2$-1)
+5240 GO TO 5215
+5250 RETURN
+
+
+6000 REM ==========================================
+6010 REM   INSERTAR cap2$ EN PLANTILLA t$ -> a$
+6020 REM ==========================================
+6030 LET hay$=t$: LET need$="*": GO SUB 2000
+6040 IF pos=0 THEN LET a$=t$: RETURN
+6050 IF cap2$="" THEN LET cap2$="ESO"
+6060 LET a$=t$(1 TO pos-1)+cap2$+t$(pos+1 TO )
+6070 RETURN
+
+
+7000 REM ==========================================
+7010 REM    RESPUESTA COMODIN (a$)
+7020 REM ==========================================
+7030 LET fi=1+INT(RND*nFb)
+7040 LET a$=fb$(fi)
+7050 RETURN
+
+
+8000 REM ==========================================
+8010 REM  TRIM DERECHA PARA t$
+8020 REM Entrada/Salida: t$
+8030 REM ==========================================
+8040 REPEAT : WHILE LEN t$>0 AND t$(LEN t$)=" "
+8050   LET t$=t$(1 TO LEN t$-1)
+8060 REPEAT UNTIL 0
+8070 RETURN

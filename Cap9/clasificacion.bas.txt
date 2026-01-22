@@ -1,0 +1,47 @@
+  10 REM ============================================
+  20 REM CLASIFICAR NUEVO USUARIO CON CENTROIDES K-MEANS
+  30 REM X = minutos conectados (0..60)
+  40 REM Y = mensajes (0..30)
+  50 REM Centroides finales: C1(46,5) C2(53,18) C3(15,1)
+  60 REM ============================================
+
+  70 PAPER 7: INK 0: BORDER 7: CLS
+  80 PRINT "CLASIFICADOR (k-means)"
+  90 PRINT "Introduce un nuevo usuario (X,Y)"
+ 100 PRINT
+
+ 110 REM --- CENTROIDES (ajusta aqui si cambian) ---
+ 120 LET U1=46: LET V1=5
+ 130 LET U2=53: LET V2=18
+ 140 LET U3=15: LET V3=1
+
+ 150 INPUT "MINUTOS (0-60)? ";XM
+ 160 INPUT "MENSAJES (0-30)? ";YM
+
+ 170 IF XM<0 THEN LET XM=0
+ 180 IF XM>60 THEN LET XM=60
+ 190 IF YM<0 THEN LET YM=0
+ 200 IF YM>30 THEN LET YM=30
+
+ 210 REM --- DISTANCIAS AL CUADRADO (sin raiz) ---
+ 220 LET DX=XM-U1: LET DY=YM-V1: LET D1=DX*DX+DY*DY
+ 230 LET DX=XM-U2: LET DY=YM-V2: LET D2=DX*DX+DY*DY
+ 240 LET DX=XM-U3: LET DY=YM-V3: LET D3=DX*DX+DY*DY
+
+ 250 REM --- ELEGIR EL MINIMO ---
+ 260 LET CL=1: LET BD=D1
+ 270 IF D2<BD THEN LET BD=D2: LET CL=2
+ 280 IF D3<BD THEN LET BD=D3: LET CL=3
+
+ 290 PRINT
+ 300 PRINT "DISTANCIAS AL CUADRADO:":PRINT " C1=";D1;"  C2=";D2;"  C3=";D3
+ 310 INK 1: PRINT "ASIGNADO A CLUSTER ";CL
+
+ 320 REM --- ETIQUETA HUMANA (segun tus centroides) ---
+ 330 IF CL=3 THEN PRINT "PERFIL: SILENCIOSO (baja actividad)"
+ 340 IF CL=1 THEN PRINT "PERFIL: SOCIAL (lee mucho, pocos mensajes)"
+ 350 IF CL=2 THEN PRINT "PERFIL: ACTIVO (muchos mensajes)"
+
+ 360 PRINT:INK 0
+ 370 PAUSE 0 : STOP
+

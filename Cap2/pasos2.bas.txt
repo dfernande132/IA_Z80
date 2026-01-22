@@ -1,0 +1,18 @@
+10  REM Laboratorio de Estres O(n^2) con tiempos
+20  INPUT "Numero de elementos (N): "; n
+30  DIM a(n): REM Crear el array para los datos 
+40  FOR i = 1 TO n: LET a(i) = INT(RND * 1000): NEXT i
+
+60  PRINT "Buscando duplicados en "; n; " elementos..."
+70  LET tinicio = TIME: REM Capturar tiempo inicial 
+
+90  FOR i = 1 TO n - 1
+100   FOR j = i + 1 TO n
+110     IF a(i) = a(j) THEN PRINT "Coincidencia en pos "; i; " y "; j
+120   NEXT j
+130 NEXT i
+
+150 LET tfinal = TIME
+160 LET segundos = (tfinal - tinicio) / 50
+170 PRINT "---"
+180 PRINT "Proceso finalizado en "; segundos; " segundos."

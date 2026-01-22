@@ -1,0 +1,89 @@
+10 REM --- Programa Principal  ---
+15 REM layer 1,1
+20 LET nvars=3
+30 LET npts =6
+40 LET ymax =120
+50 DIM a1(npts): DIM a2(npts): DIM a3(npts)
+55 REM TIEMPOS para 50,100,150,200 y 250 elementos ordenados con Bubble, Shell y Quick Sort 
+60 LET a1(1)=3.5: LET a1(2)=14.5: LET a1(3)=32: LET a1(4)=57: LET a1(5)=90: LET a1(6)=120
+70 LET a2(1)=1.5: LET a2(2)=3.5: LET a2(3)=5.5: LET a2(4)=8: LET a2(5)=10: LET a2(6)=13.5
+80 LET a3(1)=1: LET a3(2)=1.8: LET a3(3)=3.8: LET a3(4)=5.5: LET a3(5)=7: LET a3(6)=8.5
+90 REM llamar a la rutina para dibujar la grafica
+100 PROC drawG(nvars,npts,ymax)
+110 PAUSE 0: STOP
+
+1000   REM --- Procedimiento para dibujar tres curvas ---
+1010   DEFPROC drawG(nvars,npts,ymax)
+1020   LOCAL i,stepx,scaley
+1030   LOCAL xax,yax,x0,y0,xspan,yspan
+1040   LOCAL x1,y1,x2,y2
+1050   LOCAL a$,x
+1060   REM --- Configuración de la gráfica ---
+1070   LET xax=24: LET yax=23         REM eje X
+1080   LET x0 =32: LET y0 =24         REM origen de la gráfica (sobre el eje X)
+1090   LET xspan=220: LET yspan=135   REM tamaño del área de la gráfica
+1100   INK 0: PAPER 7: BORDER 7: CLS
+1110   REM --- Ejes (PLOT absoluto + DRAW relativo) ---
+1120   INK 0
+1130   PLOT xax,yax: DRAW 230,0
+1140   PLOT 31,16: DRAW 0,143
+1150   REM Nombramos los ejes
+1160   INK 2
+1170   PRINT AT 20,14;"Muestras"
+1180   LET a$="Tiempo"
+1190   FOR x=7 TO 12
+1200     PRINT AT x,1;a$(x-6);
+1210   NEXT x
+1220   INK 0: INVERSE 1
+1230   PRINT AT 0,6;"GRAFICA DE RENDIMIENTO"
+1240   INVERSE 0
+
+1250   REM --- Escalado ---
+1260   LET scaley=yspan/ymax
+1270   IF npts < 2 THEN LET stepx=0
+1280   IF npts >= 2 THEN LET stepx=xspan/(npts-1)
+
+1290   REM =========================================================
+1300   REM Curva 1: a1()  (INK 1)
+1310   REM =========================================================
+1320   INK 1
+1330   LET x1=x0
+1340   LET y1=y0+a1(1)*scaley
+1350   PLOT x1,y1
+1360   FOR i=2 TO npts
+1370     LET x2=x0+(i-1)*stepx
+1380     LET y2=y0+a1(i)*scaley
+1390     DRAW x2-x1,y2-y1
+1400     LET x1=x2: LET y1=y2
+1410   NEXT i
+1420   IF nvars < 2 THEN GO TO 1670
+
+1430   REM =========================================================
+1440   REM Curva 2: a2()  (INK 3)
+1450   REM =========================================================
+1460   INK 3
+1470   LET x1=x0
+1480   LET y1=y0+a2(1)*scaley
+1490   PLOT x1,y1
+1500   FOR i=2 TO npts
+1510     LET x2=x0+(i-1)*stepx
+1520     LET y2=y0+a2(i)*scaley
+1530     DRAW x2-x1,y2-y1
+1540     LET x1=x2: LET y1=y2
+1550   NEXT i
+1560 IF nvars < 3 THEN GO TO 1670
+
+1570   REM =========================================================
+1580   REM Curva 3: a3()  (INK 5)
+1590   REM =========================================================
+1600   INK 5
+1610   LET x1=x0
+1620   LET y1=y0+a3(1)*scaley
+1630   PLOT x1,y1
+1640   FOR i=2 TO npts
+1650     LET x2=x0+(i-1)*stepx
+1660     LET y2=y0+a3(i)*scaley
+1670     DRAW x2-x1,y2-y1
+1680     LET x1=x2: LET y1=y2
+1690   NEXT i
+1700 ENDPROC

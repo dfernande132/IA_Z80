@@ -1,0 +1,27 @@
+10 PRINT "Test velocidad: Float vs Entero (punto fijo)"
+15 RUN AT 3
+20 LET n = 500
+30 LET reps = 5
+
+40 REM --- FLOAT ---
+50 LET bestF = 999999
+60 FOR r = 1 TO reps
+70   LET s = 0
+80   LET t0 = TIME
+90   FOR i = 1 TO n: LET s = s + 1.25: NEXT i
+100  LET dt = TIME - t0
+110  IF dt < bestF THEN LET bestF = dt
+120 NEXT r
+130 PRINT "Float (mejor): "; bestF/50; " s"
+
+140 REM --- ENTERO 16-bit (punto fijo x100) ---
+150 LET bestI = 999999
+160 FOR r = 1 TO reps
+170   LET %S = 0
+180   LET t0 = TIME
+190   FOR %I = 1 TO n: LET %S = %S + 125: NEXT %I
+200   LET dt = TIME - t0
+210   IF dt < bestI THEN LET bestI = dt
+220 NEXT r
+230 PRINT "Entero (mejor): "; bestI/50; " s"
+240 PRINT "PF (x100) = "; %S; "  -> "; %S/100

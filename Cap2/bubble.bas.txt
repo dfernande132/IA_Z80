@@ -1,0 +1,35 @@
+10 REM --- LABORATORIO DE RENDIMIENTO: BUBBLE SORT ---
+15 RUN AT 3: REM Ponemos el Z80 a 28 MHz.
+20  LET n = 300
+30  DIM a(n)
+40  REM LLAMAMOS A LA FUNCION QUE NOS GENERA NUMEROS ALEATORIOS
+50  PROC genRand(n)
+60  PRINT "Ordenando "; n; " elementos..."
+70 LET tinicio= TIME
+80 REM LLAMAMOS A LA FUNCION DE ORDENACION
+90  PROC bubbleSort(n)
+100 LET tfinal = TIME
+120 LET transcurrido = (tfinal - tinicio) / 50
+130 PRINT "Completado en "; transcurrido; " segundos."
+140 REM --- COMPROBAMOS SI EL ARRAY ESTA ORDENADO ---
+145 LET OK = 1
+150 FOR i=1 TO n-1
+160 IF a(i) > a(i+1) THEN LET OK =0
+170 NEXT i
+180 IF OK=1 THEN PRINT "Array correctamente ordenado.": ELSE PRINT "Error en el ordenamiento."
+200 PAUSE 0: STOP
+
+2000 DEFPROC genRand(n)
+2010   LOCAL i
+2020   FOR i = 1 TO n: LET a(i) = INT(RND * 1000): NEXT i
+2030 ENDPROC
+
+3000 DEFPROC bubbleSort(n)
+3010   LOCAL i, j, t
+3020   FOR i = 1 TO n - 1
+3030     FOR j = 1 TO n - i
+3040       IF a(j) > a(j + 1) THEN LET t = a(j): LET a(j) = a(j + 1): LET a(j + 1) = t
+3070     NEXT j
+3080   NEXT i
+3090 ENDPROC
+

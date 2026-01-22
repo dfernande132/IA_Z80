@@ -1,0 +1,51 @@
+ 10 REM ==========================================
+ 20 REM NUBES 2D (SILENCIOSOS vs ACTIVOS) - ZX SPECTRUM
+ 30 REM Eje X: minutos (0..60)  Eje Y: mensajes (0..30)
+ 40 REM Dibuja dos grupos para ilustrar separacion visual
+ 50 REM ==========================================
+
+ 60 RANDOMIZE
+ 70 CLS: PAPER 7: INK 1: BORDER 7
+ 80 LET X0=10: LET X1=245
+ 90 LET Y0=10: LET Y1=165
+100 LET W=X1-X0: LET H=Y1-Y0
+
+110 REM RANGOS "REALES" DE DATOS
+120 LET XMAX=60
+130 LET YMAX=40
+
+140 REM DIBUJA EJES
+150 INK 1
+160 PLOT X0,Y0: DRAW W,0
+170 PLOT X0,Y0: DRAW 0,H
+180 INK 0
+190 PRINT AT 0,0;"  INTUICION - NUBES 2D"
+
+200 REM CUANTOS PUNTOS
+210 LET NS=35   : REM silenciosos
+220 LET NA=35   : REM activos
+
+230 REM ------------------------------------------
+240 REM SILENCIOSOS: X en [5..25], Y en [0..10]
+250 REM ------------------------------------------
+260 INK 1
+270 FOR I=1 TO NS
+280   LET XR=7 + INT(RND*21)      REM 5..25
+290   LET YR=1 + INT(RND*11)      REM 0..10
+300   LET XP=X0 + INT(XR*W/XMAX)
+310   LET YP=Y0 + INT(YR*H/YMAX)
+320   PLOT XP,YP
+330 NEXT I
+
+340 REM ------------------------------------------
+350 REM ACTIVOS: X en [30..60], Y en [12..30]
+360 REM ------------------------------------------
+370 INK 1
+380 FOR I=1 TO NA
+390   LET XR=33 + INT(RND*31)     REM 30..60
+400   LET YR=15 + INT(RND*19)     REM 12..30
+410   LET XP=X0 + INT(XR*W/XMAX)
+420   LET YP=Y0 + INT(YR*H/YMAX)
+430   PLOT XP,YP
+440 NEXT I
+450 PAUSE (0): STOP

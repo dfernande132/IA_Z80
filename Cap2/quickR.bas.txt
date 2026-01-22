@@ -1,0 +1,101 @@
+10 REM --- LABORATORIO DE RENDIMIENTO: QUICK SORT ROBUSTO ---
+15 RUN AT 3: REM Ponemos el Z80 a 28 MHz.
+20  LET n = 50
+30  DIM a(n)
+40  REM LLAMAMOS A LA FUNCION QUE NOS GENERA NUMEROS ALEATORIOS
+50  PROC genRand(n)
+60  PRINT "Ordenando "; n; " elementos..."
+70  LET tinicio= TIME
+80  REM LLAMAMOS A LA FUNCION DE ORDENACION
+90  PROC quickSortRobust(1,n)
+100 LET tfinal = TIME
+120 LET transcurrido = (tfinal - tinicio) / 50
+130 PRINT "Completado en ";transcurrido;" segundos."
+140 REM --- COMPROBAMOS SI EL ARRAY ESTA ORDENADO ---
+145 LET OK = 1
+150 FOR i=1 TO n-1
+160 IF a(i) > a(i+1) THEN LET OK =0
+170 NEXT i
+180 IF OK=1 THEN PRINT "Array correctamente ordenado.": ELSE PRINT "Error en el ordenamiento."
+200 PAUSE 0: STOP
+
+2000 DEFPROC genRand(n)
+2010   LOCAL i
+2020   FOR i = 1 TO n: LET a(i) = INT(RND * 1000): NEXT i
+2030 ENDPROC
+
+5000 DEFPROC quickSortRobust(low, high)
+5010   LOCAL THRESH, MAXSTACK
+5020   LOCAL top, lo, hi, mid, pivot
+5030   LOCAL i, j, t, leftSize, rightSize
+5040   LOCAL k, key, m
+5050   IF high <= low THEN ENDPROC
+5060   LET THRESH = 16
+5070   LET MAXSTACK = 128
+5080   DIM L(MAXSTACK): DIM H(MAXSTACK)
+5090   LET top = 1
+5100   LET L(top) = low
+5110   LET H(top) = high
+
+5120   REPEAT : WHILE top > 0
+5130     LET lo = L(top)
+5140     LET hi = H(top)
+5150     LET top = top - 1
+5160     REM --- Particionado iterativo hasta que el tramo sea pequeño ---
+5170     REPEAT : WHILE (hi - lo + 1) > THRESH
+5180       LET mid = INT((lo + hi) / 2)
+5190       REM --- Mediana de tres (deja a(lo) <= a(mid) <= a(hi)) ---
+5200       IF a(lo)  > a(mid) THEN LET t=a(lo):  LET a(lo)=a(mid):  LET a(mid)=t
+5210       IF a(lo)  > a(hi)  THEN LET t=a(lo):  LET a(lo)=a(hi):   LET a(hi)=t
+5220       IF a(mid) > a(hi)  THEN LET t=a(mid): LET a(mid)=a(hi):  LET a(hi)=t
+5230       LET pivot = a(mid)
+5240       LET i = lo
+5250       LET j = hi
+
+5260       REM --- Partición tipo Hoare ---
+5270       REPEAT : WHILE i <= j
+5280         REM avanzar i mientras a(i) < pivot
+5290         REPEAT : WHILE a(i) < pivot
+5300           LET i = i + 1
+5310         REPEAT UNTIL 0
+5320         REM retroceder j mientras a(j) > pivot
+5330         REPEAT : WHILE a(j) > pivot
+5340           LET j = j - 1
+5350         REPEAT UNTIL 0
+5360         IF i <= j THEN LET t=a(i): LET a(i)=a(j): LET a(j)=t: LET i=i+1: LET j=j-1
+5370       REPEAT UNTIL 0
+
+5380       REM --- Elegir qué tramo apilar: apila el grande, sigue con el pequeño ---
+5390       LET leftSize  = j - lo + 1
+5400       LET rightSize = hi - i + 1
+5410       IF leftSize < rightSize THEN GO TO 5500
+
+5420       REM (ELSE) apilar izquierda si existe, seguir con derecha (lo=i)
+5430       IF lo < j THEN LET top=top+1: LET L(top)=lo: LET H(top)=j
+5440       IF top > MAXSTACK THEN PRINT "ERROR: pila agotada.": STOP
+5450       LET lo = i
+5460       GO TO 5550
+
+5500       REM (THEN) apilar derecha si existe, seguir con izquierda (hi=j)
+5510       IF i < hi THEN LET top=top+1: LET L(top)=i: LET H(top)=hi
+5520       IF top > MAXSTACK THEN PRINT "ERROR: pila agotada.": STOP
+5530       LET hi = j
+
+5550     REPEAT UNTIL 0
+
+5560     REM --- Remate con inserción en el tramo pequeño [lo..hi] ---
+5570     FOR k = lo + 1 TO hi
+5580       LET key = a(k)
+5590       LET m = k - 1
+
+5600       REPEAT
+5610         WHILE m >= lo
+5620         WHILE a(m) > key
+5630         LET a(m+1) = a(m)
+5640         LET m = m - 1
+5650       REPEAT UNTIL 0
+5660       LET a(m+1) = key
+5670     NEXT k
+
+5680   REPEAT UNTIL 0
+5690 ENDPROC

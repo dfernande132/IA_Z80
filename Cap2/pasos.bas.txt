@@ -1,0 +1,17 @@
+10  REM Laboratorio de Estres O(n^2)
+20  INPUT "Numero de elementos (N): "; n
+30  DIM a(n): REM Crear el array para los datos 
+40  FOR i = 1 TO n: LET a(i) = INT(RND * 1000): NEXT i
+
+60  PRINT "Buscando duplicados en "; n; " elementos..."
+70  REM Iniciamos contador de operaciones
+80  LET pasos=0
+90  FOR i = 1 TO n - 1
+100   FOR j = i + 1 TO n
+110    IF a(i) = a(j) THEN PRINT "Coincidencia en pos "; i; " y "; j
+120    pasos=pasos+1   
+130   NEXT j
+140 NEXT i
+
+170 PRINT "------------------"
+180 PRINT "Proceso finalizado con ";pasos; " pasos"

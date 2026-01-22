@@ -1,0 +1,31 @@
+
+10 REM ==============BERNOULLI.BAS====================
+20 REM  BERNOULLI NUMBERS (B0..BN) - NextBASIC
+30 REM  Recrea el algoritmo de Ada Lovelace
+40 REM  Bm queda en A(1) al final de cada iteracion m
+50 REM ================================================
+
+60 LET N = 14
+70 DIM A(N+1)
+
+80 PRINT "Numeros de Bernoulli B0..B";N
+90 PRINT "--------------------------------"
+
+100 FOR m = 0 TO N
+
+110   REM A(m) <- 1/(m+1)  (usamos A(m+1) por indices 1-based)
+120   LET A(m+1) = 1/(m+1)
+
+130   REM Barrido hacia atras: A(j-1) <- j*(A(j-1)-A(j))
+140   FOR j = m+1 TO 2 STEP -1
+150     LET A(j-1) = (j-1) * (A(j-1) - A(j))
+160   NEXT j
+
+170   REM En este punto, A(1) = B_m
+180   PRINT "B";m;" = ";A(1)
+
+190 NEXT m
+
+200 PRINT "--------------------------------"
+210 PRINT "Nota: para m impar > 1, Bm deberia ser 0 (casi)."
+220 PRINT "Si subes mucho N, el redondeo en coma flotante se nota."

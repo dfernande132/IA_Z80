@@ -1,0 +1,201 @@
+  10 REM ============================================
+  20 REM K-MEANS 2D (ZX SPECTRUM / SINCLAIR BASIC)
+  30 REM Usuarios de foro: X=minutos, Y=mensajes
+  40 REM 3 clusters: silenciosos / sociales / activos
+  50 REM N = 10 + 15 + 17 = 42, K=3
+  60 REM Muestra iteraciones en pantalla
+  70 REM ============================================
+
+  80 RANDOMIZE
+  90 LET N=42
+ 100 LET K=3
+ 110 LET IMAX=12
+
+ 120 DIM X(N): DIM Y(N): DIM G(N)
+ 130 DIM U(K): DIM V(K)          : REM centroides (minutos,mensajes)
+ 140 DIM S(K): DIM T(K): DIM C(K): REM sumas y conteos
+
+ 150 REM ----- PARAMETROS DE ESCALA PARA PLOT -----
+ 160 LET XMAX=60
+ 170 LET YMAX=30
+ 180 LET X0=10: LET X1=245
+ 190 LET Y0=10: LET Y1=165
+ 200 LET W=X1-X0: LET H=Y1-Y0
+
+ 210 REM ============================================
+ 220 REM 1) CARGAR DATASET FIJO (SIN ETIQUETAS)
+ 230 REM ============================================
+
+ 235 LET I=0
+ 240 RESTORE 9000
+ 250 FOR I=1 TO N
+ 260   READ X(I),Y(I)
+ 270 NEXT I
+
+ 280 REM Inicialmente sin asignacion
+ 290 FOR I=1 TO N: LET G(I)=0: NEXT I
+
+ 430 REM Inicialmente sin asignacion
+ 440 FOR I=1 TO N: LET G(I)=0: NEXT I
+
+ 450 REM ============================================
+ 460 REM 2) INICIALIZAR CENTROIDES (3 puntos aleatorios)
+ 470 REM ============================================
+ 480 FOR C1=1 TO K
+ 490   LET R=1+INT(RND*N)
+ 500   LET U(C1)=X(R)
+ 510   LET V(C1)=Y(R)
+ 520 NEXT C1
+
+ 530 REM ============================================
+ 540 REM 3) ITERACIONES K-MEANS
+ 550 REM ============================================
+
+ 560 FOR IT=1 TO IMAX
+ 570   LET CHG=0
+
+ 580   REM --- PASO A: ASIGNACION ---
+ 590   FOR I=1 TO N
+ 600     LET BEST=1
+ 610     LET DX=X(I)-U(1): LET DY=Y(I)-V(1)
+ 620     LET BD=DX*DX+DY*DY
+ 630     FOR C1=2 TO K
+ 640       LET DX=X(I)-U(C1): LET DY=Y(I)-V(C1)
+ 650       LET D=DX*DX+DY*DY
+ 660       IF D<BD THEN LET BD=D: LET BEST=C1
+ 670     NEXT C1
+ 680     IF G(I)<>BEST THEN LET G(I)=BEST: LET CHG=1
+ 690   NEXT I
+
+ 700   REM --- PASO B: RECOMPUTAR CENTROIDES ---
+ 710   FOR C1=1 TO K
+ 720     LET S(C1)=0: LET T(C1)=0: LET C(C1)=0
+ 730   NEXT C1
+
+ 740   FOR I=1 TO N
+ 750     LET C1=G(I)
+ 760     LET S(C1)=S(C1)+X(I)
+ 770     LET T(C1)=T(C1)+Y(I)
+ 780     LET C(C1)=C(C1)+1
+ 790   NEXT I
+
+ 800   FOR C1=1 TO K
+ 810     IF C(C1)=0 THEN GO TO 860
+ 820     LET U(C1)=S(C1)/C(C1)
+ 830     LET V(C1)=T(C1)/C(C1)
+ 840     GO TO 880
+ 860     REM si un cluster queda vacio, reinicia con un punto aleatorio
+ 870     LET R=1+INT(RND*N): LET U(C1)=X(R): LET V(C1)=Y(R)
+ 880   NEXT C1
+
+ 890   REM --- DIBUJO DE ESTA ITERACION ---
+ 900   GO SUB 2000
+
+ 910   REM si ya no hay cambios, terminar antes
+ 920   IF CHG=0 THEN GO TO 1200
+ 930 NEXT IT
+
+ 940 GO TO 1200
+
+ 950 REM ============================================
+ 960 REM 4) FIN
+ 970 REM ============================================
+1200 PRINT AT 3,0;"FIN. Iteraciones realizadas: ";IT;"   "
+1210 PAUSE 0
+1220 STOP
+
+
+1999 REM ============================================
+2000 REM DIBUJAR: EJES + PUNTOS COLOREADOS + CENTROIDES
+2001 REM ============================================
+2010 PAPER 7: INK 0: BORDER 7: CLS
+
+2020 REM Ejes
+2030 INK 0
+2040 PLOT X0,Y0: DRAW W,0
+2050 PLOT X0,Y0: DRAW 0,H
+
+2070 PRINT AT 0,0;"   K-MEANS (k=3)  ITER=";IT;"   "
+2085 INK 1: PRINT AT 2,0;"PUNTOS: C1=";C(1);"  C2=";C(2);"  C3=";C(3): INK 0
+
+2090 REM Puntos (color segun cluster asignado)
+2100 FOR I=1 TO N
+2110   LET XP=X0 + INT(X(I)*W/XMAX)
+2120   LET YP=Y0 + INT(Y(I)*H/YMAX)
+
+2130   IF G(I)=1 THEN INK 1
+2140   IF G(I)=2 THEN INK 2
+2150   IF G(I)=3 THEN INK 4
+2160   PLOT XP,YP
+2170 NEXT I
+
+2180 REM Centroides (cruz)
+2190 FOR C1=1 TO K
+2200   LET XP=X0 + INT(U(C1)*W/XMAX)
+2210   LET YP=Y0 + INT(V(C1)*H/YMAX)
+
+2220   IF C1=1 THEN INK 1
+2230   IF C1=2 THEN INK 2
+2240   IF C1=3 THEN INK 4
+
+2250   PLOT XP,YP
+2260   DRAW 0,0
+2270   PLOT XP-2,YP: DRAW 4,0
+2280   PLOT XP,YP-2: DRAW 0,4
+2290 NEXT C1
+
+2300 INK 1
+2320 PRINT AT 1,0;"C1=(";INT(U(1));",";INT(V(1));") C2=(";INT(U(2));",";INT(V(2));") C3=(";INT(U(3));",";INT(V(3));")"
+2330 PAUSE 0
+2340 RETURN
+
+8999 REM ============================================
+9000 REM DATASET: (MINUTOS, MENSAJES)  N=42
+9010 REM 10 silenciosos + 15 sociales + 17 activos
+9020 REM (k-means no usa etiquetas; son solo puntos)
+9030 REM ============================================
+
+9050 DATA 12,1
+9060 DATA 15,0
+9070 DATA 18,2
+9080 DATA 10,1
+9090 DATA 20,3
+9100 DATA 14,2
+9110 DATA 16,1
+9120 DATA 19,4
+9130 DATA 11,0
+9140 DATA 17,3
+
+9160 DATA 38,2
+9170 DATA 45,3
+9180 DATA 52,1
+9190 DATA 40,4
+9200 DATA 55,5
+9210 DATA 47,2
+9220 DATA 50,6
+9230 DATA 42,1
+9240 DATA 58,4
+9250 DATA 36,3
+9260 DATA 44,5
+9270 DATA 53,2
+9280 DATA 39,1
+9290 DATA 60,6
+9300 DATA 48,3
+
+9320 DATA 40,15
+9330 DATA 48,18
+9340 DATA 55,20
+9350 DATA 43,14
+9360 DATA 60,22
+9370 DATA 50,16
+9380 DATA 58,25
+9390 DATA 46,13
+9400 DATA 52,19
+9410 DATA 57,17
+9420 DATA 45,21
+9430 DATA 54,24
+9440 DATA 41,12
+9450 DATA 59,18
+9460 DATA 49,23
+9470 DATA 56,16
+9480 DATA 47,20
