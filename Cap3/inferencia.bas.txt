@@ -4,32 +4,49 @@
   40 REM  Hechos: -1 desconocido, 0 falso, 1 verdadero
   50 REM ============================================
 
-  60 LET NF=12: LET NR=7
-  70 DIM F(NF)
-  80 DIM C1(NR): DIM C2(NR): DIM TH(NR)
+  55 LET NOBS=7              REM Hechos observables: 1..7
+  56 LET MAXF=50              REM hechos soportados
+  57 LET MAXR=50             REM reglas soportadas
 
-  90 FOR I=1 TO NF: LET F(I)=-1: NEXT I
+  60 DIM F(MAXF)
+  70 DIM C1(MAXR): DIM C2(MAXR): DIM TH(MAXR)
 
- 100 REM --- CARGAR REGLAS (Base de Conocimiento) ---
+  80 REM --- CARGAR REGLAS (Base de Conocimiento) ---
+  90 LET NR=0
+ 100 LET NF=NOBS
  110 RESTORE 9000
- 120 FOR R=1 TO NR
- 130 READ C1(R),C2(R),TH(R)
- 140 NEXT R
 
- 150 CLS
- 160 PRINT "SISTEMA EXPERTO:": PRINT "CARGA DESDE CINTA"
- 170 PRINT "Responde S o N Mayusculas"
- 180 PRINT
+ 120 REM Leemos reglas hasta DATA 0,0,0
+ 130 READ A,B,T
+ 140 IF A=0 AND B=0 AND T=0 THEN GOTO 200
 
- 190 REM --- HECHOS OBSERVABLES (Memoria de Trabajo) ---
- 200 GO SUB 2000
+ 150 LET NR=NR+1
+ 160 LET C1(NR)=A: LET C2(NR)=B: LET TH(NR)=T
 
- 210 REM --- MOTOR DE INFERENCIA (Forward Chaining) ---
- 220 GO SUB 3000
+ 170 LET X=ABS A: IF X>NF THEN LET NF=X
+ 175 LET X=ABS B: IF X>NF THEN LET NF=X
+ 180 IF T>NF THEN LET NF=T
 
- 230 REM --- INFORME FINAL ---
- 240 GO SUB 4000
- 250 STOP
+ 190 GOTO 130
+
+ 200 REM --- INICIALIZAR HECHOS ---
+ 210 FOR I=1 TO NF: LET F(I)=-1: NEXT I
+
+ 220 CLS
+ 230 PRINT "SISTEMA EXPERTO:"
+ 240 PRINT "CARGA DESDE CINTA"
+ 250 PRINT "Responde S o N Mayusculas"
+ 260 PRINT
+
+ 270 REM --- HECHOS OBSERVABLES (Memoria de Trabajo) ---
+ 280 GO SUB 2000
+
+ 290 REM --- MOTOR DE INFERENCIA ---
+ 300 GO SUB 3000
+
+ 310 REM --- INFORME FINAL ---
+ 320 GO SUB 4000
+ 330 PAUSE 0: STOP
 
  999 REM ============================================
 1000 REM 2000) PREGUNTAS AL USUARIO (hechos base)
@@ -63,24 +80,25 @@
 3000 REM 3000) MOTOR DE INFERENCIA (encadenamiento)
 3001 REM Reglas: SI C1 y C2 ENTONCES TH
 3002 REM Si C2=0 significa "solo C1"
-3003 REM ============================================
-3005 LET CAMBIO=1
-3010 REPEAT: WHILE CAMBIO=1
-3020   LET CAMBIO=0
-3030   FOR R=1 TO NR
-3040     LET OK=1
-3050     REM ---- comprobar C1 ----
-3060     LET A=C1(R)
-3070     IF A>0 THEN IF F(A)<>1 THEN LET OK=0
-3080     REM ---- comprobar C2 (si existe) ----
-3090     LET B=C2(R)
-3100     IF B>0 THEN IF F(B)<>1 THEN LET OK=0
-3110     REM ---- disparar ----
-3120     IF OK=1 THEN LET T=TH(R): IF T>0 THEN IF F(T)<>1 THEN LET F(T)=1: LET CAMBIO=1
-3160   NEXT R
-3170 REPEAT UNTIL 0
-3180 RETURN
+3003 REM Soporta negacion: si C1=-4 => F(4) debe ser 0
+3004 REM ============================================
+3020 LET CAMBIO=0
+3030 FOR R=1 TO NR
+3040   LET OK=1
 
+3050   LET A=C1(R)
+3060   IF A<>0 THEN IF A>0 THEN IF F(A)<>1 THEN LET OK=0
+3065   IF A<>0 THEN IF A<0 THEN IF F(-A)<>0 THEN LET OK=0
+
+3070   LET B=C2(R)
+3080   IF B<>0 THEN IF B>0 THEN IF F(B)<>1 THEN LET OK=0
+3085   IF B<>0 THEN IF B<0 THEN IF F(-B)<>0 THEN LET OK=0
+
+3090   IF OK=1 THEN LET T=TH(R): IF T>0 THEN IF F(T)<>1 THEN LET F(T)=1: LET CAMBIO=1
+3100 NEXT R
+
+3110 IF CAMBIO=1 THEN GOTO 3020
+3120 RETURN
 
 3999 REM ============================================
 4000 REM 4000) CONCLUSIONES Y RECOMENDACIONES
@@ -88,23 +106,23 @@
 4015 PRINT "--------------------------------"
 4020 PRINT "RESULTADO:" : PRINT
 
-4030 REM Hechos de conclusion (8..12) = diagnosticos posibles
-4035 ink 1
+4035 INK 1
 4040 IF F(8)=1 THEN PRINT "- Ajusta VOL y prueba de nuevo."
 4050 IF F(9)=1 THEN PRINT "- Usa LINE OUT, no MIC."
 4060 IF F(10)=1 THEN PRINT "- Revisa cable / conector EAR"
 4070 IF F(11)=1 THEN PRINT "- La cinta puede estar desmagnetizada."
 4080 IF F(12)=1 THEN PRINT "- Posible problema de cabezal (azimut)."
-4085 ink 0
+4085 INK 0
 
-4090 REM Si no hay ninguna conclusion, damos consejo general
-4100 LET ANY=0
-4110 FOR I=8 TO 12
-4120 IF F(I)=1 THEN LET ANY=1
-4130 NEXT I
-4135 ink 3
+4090 LET ANY=0
+4100 FOR I=8 TO 12
+4110 IF F(I)=1 THEN LET ANY=1
+4120 NEXT I
+
+4135 INK 3
 4140 IF ANY=0 THEN PRINT "- No tengo suficiente evidencia. Repite y revisa conexiones."
-4145 ink 0
+4145 INK 0
+
 4160 PRINT "--------------------------------"
 4170 RETURN
 
@@ -113,53 +131,33 @@
 7001 REM ============================================
 7005 INPUT A$
 7015 IF A$="" THEN GO TO 7000
-7020 LET A$=CHR$ (CODE A$ AND 223)   REM a mayuscula
-7030 IF A$="S" THEN LET ANS=1: RETURN
-7040 IF A$="N" THEN LET ANS=0: RETURN
+7030 IF A$="S" OR A$="s" THEN LET ANS=1: RETURN
+7040 IF A$="N" OR A$="n" THEN LET ANS=0: RETURN
 7050 PRINT "Responde S o N."
 7060 GO TO 7000
 
 
-8999 REM ============================================
-9000 REM BASE DE CONOCIMIENTO (REGLAS)
-9010 REM Formato: C1,C2,TH
-9020 REM Hechos:
-9030 REM 1 cinta? 2 volumen alto 3 lineout 4 cable ok
-9040 REM 5 rayas carga 6 R error 7 otra cinta falla
-9050 REM 8..12 conclusiones
-9060 REM ============================================
+9000 REM ============================================
+9010 REM BASE DE CONOCIMIENTO (REGLAS)
+9020 REM Formato: C1,C2,TH
+9030 REM ============================================
 
-9100 REM R1: SI NO volumen alto -> concluye (8)
-9110 REM DATA 0,0,0
-9120 REM (nota: no usamos negaciones en este motor minimo;
-9130 REM las modelamos con reglas alternativas basadas en sintomas)
+9070 REM --- Error: recomendaciones básicas condicionadas ---
+9080 DATA 6,-2,8     REM error + volumen NO alto -> subir volumen
+9090 DATA 6,-3,9     REM error + NO lineout -> usar lineout
+9100 DATA 6,-4,10    REM error + cable NO OK -> revisar cable
 
-9140 REM R1: SI hay "R Tape loading error" Y hay rayas -> azimut/cabezal (12)
-9150 DATA 6,5,12
-9160 REM R2: SI hay rayas Y cable NO parece correcto -> revisar cable (10)
-9170 REM (otra vez: sin negacion, lo aproximamos con "cable ok" = 0)
-9180 REM Como no tenemos reglas con falsos, lo tratamos con un atajo:
-9190 REM si cable ok =0, no se activa; asi que usamos una regla directa:
-9200 REM SI NO hay rayas (5=0) no podemos modelarlo. Mantenemos reglas positivas.
+9110 REM --- Error: diagnóstico ---
+9120 DATA 6,5,12     REM error + rayas -> cabezal/azimut
+9130 DATA 6,4,12     REM error + cable OK -> posible cabezal/azimut
 
-9210 REM R2: SI NO ves rayas PERO sale error -> cable/lineout/volumen (10)
-9220 REM (simplificado: error implica revisar cadena de audio)
-9230 DATA 6,0,10
-9240 REM R3: SI otra cinta tambien falla Y hay rayas -> azimut/cabezal (12)
-9250 DATA 7,5,12
-9260 REM R4: SI solo falla una cinta -> cinta defectuosa (11)
-9270 REM DATA 0,0,0
-9280 REM (igual que arriba: sin negaciones; lo cubrimos con consejo final)
-9290 REM R4: SI volumen alto Y lineout Y cable ok Y sigue error -> azimut (12)
-9300 DATA 2,3,12
-9310 REM R5: SI NO lineout (pero asumimos que si responde N a 3, no hay hecho)
-9320 REM No hay negaciones. En el informe final, si F(3)=0 sugerimos (9).
-9330 REM Lo hacemos via conclusiones directas con IF en 4000.
-9340 REM Para poder recomendar volumen/lineout/cable con un motor minimo,
-9350 REM usamos "reglas de activacion por sintomas":
-9360 REM R6: SI hay error -> sugiere volumen (8)
-9370 DATA 6,0,8
-9380 REM R7: SI hay error -> sugiere lineout (9)
-9390 DATA 6,0,9
-9400 REM R8: SI hay error -> sugiere cable (10)
-9410 DATA 6,0,10
+9140 REM --- Otra cinta falla: diagnóstico ---
+9150 DATA 7,5,11     REM otra cinta falla + rayas -> cinta mala/desmagnetizada
+9160 DATA 7,-5,10    REM otra cinta falla + NO rayas -> revisar cable/entrada
+
+9170 REM --- Refuerzos ---
+9180 DATA 5,-4,10    REM rayas + cable NO OK -> revisar cable
+9190 DATA 5,4,12     REM rayas + cable OK -> azimut probable
+9200 DATA 6,7,12     REM error + otra cinta falla -> cabezal/azimut probable
+
+9210 DATA 0,0,0      REM FIN DE REGLAS
