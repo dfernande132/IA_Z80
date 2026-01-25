@@ -68,4 +68,4 @@ Aunque muchos programas funcionan en un Spectrum 48K/128K estándar, para los ca
 ---
 **¡Espero que disfrutes explorando la inteligencia artificial en su forma más pura!**
 
-## ¡Feliz codificación! 🕹️
+## ¡Feliz codificación! 📟
