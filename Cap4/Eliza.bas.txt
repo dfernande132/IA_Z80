@@ -39,7 +39,7 @@
  3070 NEXT i
  3090 GO SUB 3220: RETURN
  3220 IF LEN s$=0 THEN RETURN
- 3230 IF s$(1)=" " THEN LET s$=s$(2 TO ): GO TO 3220
+ 3230 IF s$(1)=" " THEN LET s$=s$(2 TO LEN s$): GO TO 3220
  3240 IF s$(LEN s$)=" " THEN LET s$=s$(1 TO LEN s$-1): GO TO 3240
  3250 RETURN
  
@@ -53,8 +53,8 @@
  4120 NEXT i
  4160 NEXT p
  4170 IF found=0 THEN GO SUB 7000: RETURN : REM RESPUESTA FALLBACK
- 4180 LET cap$=sp2$(pos+lt TO )
- 4210 IF LEN cap$>0 THEN IF cap$(1)=" " THEN LET cap$=cap$(2 TO ): GO TO 4210
+ 4180 LET cap$=sp2$(pos+lt TO LEN sp2$)
+ 4210 IF LEN cap$>0 THEN IF cap$(1)=" " THEN LET cap$=cap$(2 TO LEN cap$): GO TO 4210
  4220 IF LEN cap$>0 THEN IF cap$(LEN cap$)=" " THEN LET cap$=cap$(1 TO LEN cap$-1): GO TO 4220
  4570 GO SUB 5000: REM CAMBIAR PERSONA
  4580 LET ri=1+INT(RND*rCnt(p)): LET t$=r$(p,ri): GO SUB 6000
@@ -85,7 +85,7 @@
  6030 LET hay$=t$: LET need$="*": GO SUB 2000
  6040 IF pos=0 THEN LET a$=t$: RETURN
  6050 IF cap2$="" THEN LET cap2$="ESO"
- 6060 LET a$=t$(1 TO pos-1)+cap2$+t$(pos+1 TO ): RETURN
+ 6060 LET a$=t$(1 TO pos-1)+cap2$+t$(pos+1 TO LEN t$): RETURN
 
  7000 REM --- FALLBACK ---
  7030 LET fi=1+ INT ( RND *nFb): LET a$=fb$(fi): RETURN
