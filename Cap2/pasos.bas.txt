@@ -1,4 +1,4 @@
-10  REM Laboratorio de Estres O(n^2)
+10  REM Laboratorio de Estres O(n**2)
 20  INPUT "Numero de elementos (N): "; n
 30  DIM a(n): REM Crear el array para los datos 
 40  FOR i = 1 TO n: LET a(i) = INT(RND * 1000): NEXT i

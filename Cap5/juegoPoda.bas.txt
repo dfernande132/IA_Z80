@@ -178,7 +178,7 @@
 3090 LET BESTS=-2
 3100 LET NODES=0
 3105 LET DEP=0
-3107 PRINT AT 0,0;"NODOS: 0    ": REM ****************************************
+3107 PRINT AT 0,0;"NODOS: 0    "
 
 3110 FOR K=1 TO 9
 3112 LET M=ORD(K)

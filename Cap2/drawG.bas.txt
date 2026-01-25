@@ -4,10 +4,10 @@
 1030   LOCAL xax,yax,x0,y0,xspan,yspan
 1040   LOCAL x1,y1,x2,y2
 1050   LOCAL a$,x
-1060   REM --- Configuración de la gráfica ---
+1060   REM --- Configuración de la grafica ---
 1070   LET xax=24: LET yax=23         REM eje X
-1080   LET x0 =32: LET y0 =24         REM origen de la gráfica (sobre el eje X)
-1090   LET xspan=220: LET yspan=135   REM tamaño del área de la gráfica
+1080   LET x0 =32: LET y0 =24         REM origen de la grafica (sobre el eje X)
+1090   LET xspan=220: LET yspan=135   REM tamaño del área de la grafica
 1100   INK 0: PAPER 7: BORDER 7: CLS
 1110   REM --- Ejes (PLOT absoluto + DRAW relativo) ---
 1120   INK 0

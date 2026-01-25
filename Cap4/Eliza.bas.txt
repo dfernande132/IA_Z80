@@ -55,7 +55,6 @@
 1290   READ f$
 1300   LET fb$(i)=f$
 1310 NEXT i
-
 1320 RETURN
 
 1800 REM ==========================================
@@ -76,13 +75,12 @@
 1860 DATA "QUIERO","QUE SIGNIFICA QUERER *?","POR QUE QUIERES *?"
 
 1900 REM ==========================================
-1910 REM DATA FALLBACKS (nFb=3)
+1910 REM DATA FALLBACKS (RESPUESTAS COMODIN)
 1920 REM ==========================================
 1930 DATA "SIGUE DESARROLLANDOTE, POR FAVOR."
 1931 DATA "ENTIENDO. PUEDES EXPLICAR MAS?"
 1932 DATA "COMO TE HACE SENTIR ESO?"
 1933 DATA "ESO ES INTERESANTE. CUENTAME MAS."
-
 
 2000 REM ==========================================
 2010 REM  BUSCA SUBCADENA
@@ -97,7 +95,6 @@
 2100   IF hay$(i TO i+ld-1)=need$ THEN LET pos=i: RETURN
 2110 NEXT i
 2120 RETURN
-
 
 3000 REM ==========================================
 3010 REM  NORMALIZACION (s$ -> s$)
@@ -123,16 +120,17 @@
 3210 LET s$=t$
 
 3220 REM TRIM IZQ
-3230 REPEAT : WHILE LEN s$>0 AND s$(1)=" "
-3240   LET s$=s$(2 TO )
-3250 REPEAT UNTIL 0
+3230 IF LEN s$=0 THEN GO TO 3260
+3240 IF s$(1)<>" " THEN GO TO 3260
+3250 LET s$=s$(2 TO LEN s$)
+3255 GO TO 3230
 
 3260 REM TRIM DER
-3270 REPEAT : WHILE LEN s$>0 AND s$(LEN s$)=" "
-3280   LET s$=s$(1 TO LEN s$-1)
-3290 REPEAT UNTIL 0
+3270 IF LEN s$=0 THEN RETURN
+3280 IF s$(LEN s$)<>" " THEN RETURN
+3290 LET s$=s$(1 TO LEN s$-1)
+3295 GO TO 3270
 3300 RETURN
-
 
 4000 REM ==========================================
 4010 REM  GENERAR RESPUESTA (usa s$, devuelve a$)
@@ -178,30 +176,25 @@
 5030 LET cap2$=""
 5040 LET tmp$=cap$+" "
 5050 LET w$="": LET i=1
-
-5060 REPEAT: WHILE i<=LEN(tmp$)
-5070   LET c$=tmp$(i)
-
+5060 IF i>LEN(tmp$) THEN GO TO 5210
+5070 LET c$=tmp$(i)
 5080 REM ACUMULA LETRAS
-5090   IF c$<>" " THEN LET w$=w$+c$: GO TO 5197
-
+5090 IF c$<>" " THEN LET w$=w$+c$: GO TO 5197
 5100 REM ESPACIO: SI NO HAY PALABRA, SIGUE
-5110   IF w$="" THEN GO TO 5197
-
+5110 IF w$="" THEN GO TO 5197
 5120 REM MAPEO DE PRONOMBRES (PALABRA COMPLETA)
-5130   LET w2$=w$
-5140   IF w$="YO" THEN LET w2$="TU"
-5150   IF w$="MI" THEN LET w2$="TU"
-5160   IF w$="ME" THEN LET w2$="TE"
+5130 LET w2$=w$
+5140 IF w$="YO" THEN LET w2$="TU"
+5150 IF w$="MI" THEN LET w2$="TU"
+5160 IF w$="ME" THEN LET w2$="TE"
 5170 IF w$="CONMIGO" THEN LET w2$="CONTIGO"
 5180 IF w$="TU" THEN LET w2$="MI"
 5185 IF w$="TE" THEN LET w2$="ME"
 5186 IF w$="CONTIGO" THEN LET w2$="CONMIGO"
-
-5195   LET cap2$=cap2$+w2$+" "
-5196   LET w$=""
-5197   LET i=i+1
-5200 REPEAT UNTIL 0
+5195 LET cap2$=cap2$+w2$+" "
+5196 LET w$=""
+5197 LET i=i+1
+5200 GO TO 5060
 
 5210 REM TRIM FINAL
 5215 IF LEN cap2$=0 THEN RETURN
@@ -209,7 +202,6 @@
 5230 LET cap2$=cap2$(1 TO LEN cap2$-1)
 5240 GO TO 5215
 5250 RETURN
-
 
 6000 REM ==========================================
 6010 REM   INSERTAR cap2$ EN PLANTILLA t$ -> a$
@@ -220,7 +212,6 @@
 6060 LET a$=t$(1 TO pos-1)+cap2$+t$(pos+1 TO )
 6070 RETURN
 
-
 7000 REM ==========================================
 7010 REM    RESPUESTA COMODIN (a$)
 7020 REM ==========================================
@@ -228,12 +219,12 @@
 7040 LET a$=fb$(fi)
 7050 RETURN
 
-
 8000 REM ==========================================
 8010 REM  TRIM DERECHA PARA t$
 8020 REM Entrada/Salida: t$
 8030 REM ==========================================
-8040 REPEAT : WHILE LEN t$>0 AND t$(LEN t$)=" "
-8050   LET t$=t$(1 TO LEN t$-1)
-8060 REPEAT UNTIL 0
+8040 IF LEN t$=0 THEN RETURN
+8050 IF t$(LEN t$)<>" " THEN RETURN
+8055 LET t$=t$(1 TO LEN t$-1)
+8060 GO TO 8040
 8070 RETURN

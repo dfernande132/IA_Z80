@@ -5,7 +5,7 @@
 30 REM  C LIMPIA, R RANDOM, E EDIT, X SALIR
 35 REM ==========================================
 
-40 RUN AT 3 : REM 28 MHZ
+40 REM RUN AT 3 : REM 28 MHZ
 45 LET N=20
 
 46 REM --- CADENA PARA MARCO (20 GUIONES) ---
@@ -102,7 +102,6 @@
 
 1110 RETURN
 
-
 1200 REM ==========================================
 1210 REM  DIBUJA UNA CELDA (EDITOR)
 1220 REM ==========================================
@@ -143,26 +142,21 @@
 2100 FOR R=1 TO N
 2110 LET RU=U(R): LET RD=W(R)
 2120 FOR C=1 TO N
-
 2130 LET LC=P(C): LET RC=Q(C)
-
 2140 LET V = M(T,RU,LC)+M(T,RU,C)+M(T,RU,RC)
 2150 LET V = V + M(T,R,LC)      +M(T,R,RC)
 2160 LET V = V + M(T,RD,LC)+M(T,RD,C)+M(T,RD,RC)
 
 2170 REM --- REGLA SIN IFS ---
 2180 LET M(NT,R,C)=((V=3) OR (M(T,R,C)=1 AND V=2)) AND 1
-
 2190 NEXT C
 2200 NEXT R
-
 2210 LET T=NT
-
 2220 GOSUB 3000
 2270 GOTO 2070
 
 3000 REM ==========================================
-3010 REM  DIBUJO CON MARCO + BLOQUE/ESPACIO (SIN STRING$)
+3010 REM  DIBUJO CON MARCO + BLOQUE/ESPACIO 
 3020 REM ==========================================
 3030 LET BR=1: LET BC=0
 3040 LET V$=CHR$ 143: LET M$=" "

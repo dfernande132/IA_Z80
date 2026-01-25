@@ -5,7 +5,7 @@
   50 REM Y() guarda CO2*10 (decimas de ppm) como ENTERO
   60 REM ===================================================
 
-  70 RANDOMIZE: RUN AT 3 
+  70 RANDOMIZE
   80 LET N=814             : REM total de muestras en DATA
   90 DIM Y(N)
   95 LET YSCALE=100    REM DATA parece CO2*100 (centésimas de ppm)

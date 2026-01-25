@@ -19,7 +19,6 @@
 180 IF OK=1 THEN PRINT "Array correctamente ordenado.": ELSE PRINT "Error en el ordenamiento."
 200 PAUSE 0: STOP
 
-
 2000 DEFPROC genRand(n)
 2010   LOCAL i
 2020   FOR i = 1 TO n: LET a(i) = INT(RND * 1000): NEXT i
