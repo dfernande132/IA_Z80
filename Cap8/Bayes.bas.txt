@@ -29,9 +29,9 @@
 
  250 FOR Z=1 TO NC
  260   FOR J=1 TO NF
- 270     FOR LV=1 TO L
- 280       LET T(Z,J,LV)=0
- 290     NEXT LV
+ 270     FOR G=1 TO L
+ 280       LET T(Z,J,G)=0
+ 290     NEXT G
  300   NEXT J
  310 NEXT Z
 
