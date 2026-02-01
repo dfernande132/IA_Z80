@@ -45,7 +45,7 @@
 2020 REM y = Y(i)/10  (ppm)
 2030 REM Devuelve A y B en unidades ppm por mes y ppm
 2040 REM ===================================================
-2045 CLS: PRINT AT 10,4; "CALCULANDO REGRESION LINEAL..."
+2045 CLS: PRINT AT 10,1; "CALCULANDO REGRESION LINEAL..."
 2050 LET M = FIN-INI+1
 2060 LET SX=0: LET SY=0: LET SXX=0: LET SXY=0
 
@@ -69,8 +69,7 @@
 3000 REM 3000) DIBUJO: puntos + recta (RAPIDO)
 3010 REM Caja: X0..X1, Y0..Y1
 3020 REM ===================================================
-3025 CLS:PRINT AT 10,8;  "DIBUJANDO GRAFICA..."
-3030 PAPER 7: BORDER 7: INK 0: CLS
+3030 CLS:PRINT AT 10,7;  "ESCALANDO GRAFICA..."
 3040 LET M=FIN-INI+1
 
 3050 REM ---- min/max del dato en la ventana (en unidades enteras Y()) ----
@@ -89,8 +88,7 @@
 3160 REM ---- CAJA Y EJES (margen 10) ----
 3165 LET X0=10: LET X1=245
 3168 LET Y0=10: LET Y1=165
-
-3170 INK 1
+3170 PAPER 7: BORDER 7: INK 1:CLS
 3175 PLOT X0,Y0: DRAW X1-X0,0
 3180 PLOT X0,Y0: DRAW 0,Y1-Y0
 
