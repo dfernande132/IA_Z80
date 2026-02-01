@@ -1,4 +1,3 @@
-
 10 REM ==============BERNOULLI.BAS====================
 20 REM  BERNOULLI NUMBERS (B0..BN) - NextBASIC
 30 REM  Recrea el algoritmo de Ada Lovelace
