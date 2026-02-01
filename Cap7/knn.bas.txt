@@ -9,7 +9,7 @@
   80 LET N=30
   90 LET K=5
  100 DIM M(N): DIM F(N): DIM V(N): DIM C(N)
- 110 DIM BD(K): DIM BC(K)
+ 110 DIM D(K): DIM E(K)
 
  120 REM ---- Cargar dataset ----
  130 RESTORE 9000
@@ -35,8 +35,8 @@
 
  300 REM ---- Inicializar 'mejores K' con infinito ----
  310 FOR J=1 TO K
- 320   LET BD(J)=999999
- 330   LET BC(J)=0
+ 320   LET D(J)=999999
+ 330   LET E(J)=0
  340 NEXT J
 
  350 REM ---- Evaluar distancias a todos los ejemplos ----
@@ -44,23 +44,23 @@
  370   LET DM=QM-M(I)
  380   LET DF=QF-F(I)
  390   LET DV=QV-V(I)
- 400   LET D=DM*DM+DF*DF+DV*DV
+ 400   LET DIS=DM*DM+DF*DF+DV*DV
 
  410   REM Insertar D si es menor que el peor de los K
  420   LET WP=1
  430   FOR J=2 TO K
- 440     IF BD(J)>BD(WP) THEN LET WP=J
+ 440     IF D(J)>D(WP) THEN LET WP=J
  450   NEXT J
 
- 460   IF D<BD(WP) THEN LET BD(WP)=D: LET BC(WP)=C(I)
+ 460   IF DIS<D(WP) THEN LET D(WP)=DIS: LET E(WP)=C(I)
  470 NEXT I
 
  480 REM ---- Votacion ----
  490 LET VM=0: LET VG=0: LET VE=0
  500 FOR J=1 TO K
- 510   IF BC(J)=1 THEN LET VM=VM+1
- 520   IF BC(J)=2 THEN LET VG=VG+1
- 530   IF BC(J)=3 THEN LET VE=VE+1
+ 510   IF E(J)=1 THEN LET VM=VM+1
+ 520   IF E(J)=2 THEN LET VG=VG+1
+ 530   IF E(J)=3 THEN LET VE=VE+1
  540 NEXT J
 
  550 REM ---- Decidir clase ganadora ----
@@ -93,11 +93,11 @@
 
 1999 REM ============================================
 2000 REM Empate: elegir la clase del vecino mas cercano
-2010 REM (menor BD(J))
+2010 REM (menor D(J))
 2020 REM ============================================
 2030 LET MINJ=1
 2040 FOR J=2 TO K
-2050   IF BD(J)<BD(MINJ) THEN LET MINJ=J
+2050   IF D(J)<D(MINJ) THEN LET MINJ=J
 2060 NEXT J
 2070 LET WIN=BC(MINJ)
 2080 RETURN
