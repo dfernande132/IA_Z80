@@ -30,8 +30,8 @@
 250 REM ------------------------------------------
 260 INK 1
 270 FOR I=1 TO NS
-280   LET XR=7 + INT(RND*21)      REM 5..25
-290   LET YR=1 + INT(RND*11)      REM 0..10
+280   LET XR=3 + INT(RND*21)
+290   LET YR=1 + INT(RND*11)   
 300   LET XP=X0 + INT(XR*W/XMAX)
 310   LET YP=Y0 + INT(YR*H/YMAX)
 320   PLOT XP,YP
@@ -42,8 +42,8 @@
 360 REM ------------------------------------------
 370 INK 1
 380 FOR I=1 TO NA
-390   LET XR=33 + INT(RND*31)     REM 30..60
-400   LET YR=15 + INT(RND*19)     REM 12..30
+390   LET XR=30 + INT(RND*31)   
+400   LET YR=12 + INT(RND*19)     
 410   LET XP=X0 + INT(XR*W/XMAX)
 420   LET YP=Y0 + INT(YR*H/YMAX)
 430   PLOT XP,YP

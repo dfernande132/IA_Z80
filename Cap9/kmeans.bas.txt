@@ -31,27 +31,23 @@
  250 FOR I=1 TO N
  260   READ X(I),Y(I)
  270 NEXT I
-
  280 REM Inicialmente sin asignacion
  290 FOR I=1 TO N: LET G(I)=0: NEXT I
 
- 430 REM Inicialmente sin asignacion
- 440 FOR I=1 TO N: LET G(I)=0: NEXT I
 
  450 REM ============================================
  460 REM 2) INICIALIZAR CENTROIDES (3 puntos aleatorios)
  470 REM ============================================
- 480 FOR C1=1 TO K
+ 480 FOR I=1 TO K
  490   LET R=1+INT(RND*N)
- 500   LET U(C1)=X(R)
- 510   LET V(C1)=Y(R)
- 520 NEXT C1
-
+ 500   LET U(I)=X(R)
+ 510   LET V(I)=Y(R)
+ 520 NEXT I
  530 REM ============================================
  540 REM 3) ITERACIONES K-MEANS
  550 REM ============================================
 
- 560 FOR IT=1 TO IMAX
+ 560 FOR Z=1 TO IMAX
  570   LET CHG=0
 
  580   REM --- PASO A: ASIGNACION ---
@@ -59,51 +55,50 @@
  600     LET BEST=1
  610     LET DX=X(I)-U(1): LET DY=Y(I)-V(1)
  620     LET BD=DX*DX+DY*DY
- 630     FOR C1=2 TO K
- 640       LET DX=X(I)-U(C1): LET DY=Y(I)-V(C1)
+ 630     FOR M=2 TO K
+ 640       LET DX=X(I)-U(M): LET DY=Y(I)-V(M)
  650       LET D=DX*DX+DY*DY
- 660       IF D<BD THEN LET BD=D: LET BEST=C1
- 670     NEXT C1
+ 660       IF D<BD THEN LET BD=D: LET BEST=M
+ 670     NEXT M
  680     IF G(I)<>BEST THEN LET G(I)=BEST: LET CHG=1
  690   NEXT I
 
  700   REM --- PASO B: RECOMPUTAR CENTROIDES ---
- 710   FOR C1=1 TO K
- 720     LET S(C1)=0: LET T(C1)=0: LET C(C1)=0
- 730   NEXT C1
+ 710   FOR M=1 TO K
+ 720     LET S(M)=0: LET T(M)=0: LET C(M)=0
+ 730   NEXT M
 
  740   FOR I=1 TO N
- 750     LET C1=G(I)
- 760     LET S(C1)=S(C1)+X(I)
- 770     LET T(C1)=T(C1)+Y(I)
- 780     LET C(C1)=C(C1)+1
+ 750     LET M=G(I)
+ 760     LET S(M)=S(M)+X(I)
+ 770     LET T(M)=T(M)+Y(I)
+ 780     LET C(M)=C(M)+1
  790   NEXT I
 
- 800   FOR C1=1 TO K
- 810     IF C(C1)=0 THEN GO TO 860
- 820     LET U(C1)=S(C1)/C(C1)
- 830     LET V(C1)=T(C1)/C(C1)
+ 800   FOR M=1 TO K
+ 810     IF C(M)=0 THEN GO TO 860
+ 820     LET U(M)=S(M)/C(M)
+ 830     LET V(M)=T(M)/C(M)
  840     GO TO 880
  860     REM si un cluster queda vacio, reinicia con un punto aleatorio
- 870     LET R=1+INT(RND*N): LET U(C1)=X(R): LET V(C1)=Y(R)
- 880   NEXT C1
+ 870     LET R=1+INT(RND*N): LET U(M)=X(R): LET V(M)=Y(R)
+ 880   NEXT M
 
  890   REM --- DIBUJO DE ESTA ITERACION ---
  900   GO SUB 2000
 
  910   REM si ya no hay cambios, terminar antes
  920   IF CHG=0 THEN GO TO 1200
- 930 NEXT IT
+ 930 NEXT Z
 
  940 GO TO 1200
 
  950 REM ============================================
  960 REM 4) FIN
  970 REM ============================================
-1200 PRINT AT 3,0;"FIN. Iteraciones realizadas: ";IT;"   "
+1200 PRINT AT 3,0;"FIN. Iteraciones realizadas: ";Z;"   "
 1210 PAUSE 0
 1220 STOP
-
 
 1999 REM ============================================
 2000 REM DIBUJAR: EJES + PUNTOS COLOREADOS + CENTROIDES
@@ -115,7 +110,7 @@
 2040 PLOT X0,Y0: DRAW W,0
 2050 PLOT X0,Y0: DRAW 0,H
 
-2070 PRINT AT 0,0;"   K-MEANS (k=3)  ITER=";IT;"   "
+2070 PRINT AT 0,0;"   K-MEANS (k=3)  ITER=";Z;"   "
 2085 INK 1: PRINT AT 2,0;"PUNTOS: C1=";C(1);"  C2=";C(2);"  C3=";C(3): INK 0
 
 2090 REM Puntos (color segun cluster asignado)
@@ -130,22 +125,22 @@
 2170 NEXT I
 
 2180 REM Centroides (cruz)
-2190 FOR C1=1 TO K
-2200   LET XP=X0 + INT(U(C1)*W/XMAX)
-2210   LET YP=Y0 + INT(V(C1)*H/YMAX)
+2190 FOR M=1 TO K
+2200   LET XP=X0 + INT(U(M)*W/XMAX)
+2210   LET YP=Y0 + INT(V(M)*H/YMAX)
 
-2220   IF C1=1 THEN INK 1
-2230   IF C1=2 THEN INK 2
-2240   IF C1=3 THEN INK 4
+2220   IF M=1 THEN INK 1
+2230   IF M=2 THEN INK 2
+2240   IF M=3 THEN INK 4
 
 2250   PLOT XP,YP
 2260   DRAW 0,0
 2270   PLOT XP-2,YP: DRAW 4,0
 2280   PLOT XP,YP-2: DRAW 0,4
-2290 NEXT C1
+2290 NEXT M
 
 2300 INK 1
-2320 PRINT AT 1,0;"C1=(";INT(U(1));",";INT(V(1));") C2=(";INT(U(2));",";INT(V(2));") C3=(";INT(U(3));",";INT(V(3));")"
+2320 PRINT AT 1,0;"M=(";INT(U(1));",";INT(V(1));") C2=(";INT(U(2));",";INT(V(2));") C3=(";INT(U(3));",";INT(V(3));")"
 2330 PAUSE 0
 2340 RETURN
 
