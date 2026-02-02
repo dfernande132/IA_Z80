@@ -51,7 +51,6 @@
  430   FOR J=2 TO K
  440     IF D(J)>D(WP) THEN LET WP=J
  450   NEXT J
-
  460   IF DIS<D(WP) THEN LET D(WP)=DIS: LET E(WP)=C(I)
  470 NEXT I
 
@@ -99,7 +98,7 @@
 2040 FOR J=2 TO K
 2050   IF D(J)<D(MINJ) THEN LET MINJ=J
 2060 NEXT J
-2070 LET WIN=BC(MINJ)
+2070 LET WIN=E(MINJ)
 2080 RETURN
 
 8999 REM ============================================
