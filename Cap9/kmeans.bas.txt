@@ -12,7 +12,7 @@
  110 LET IMAX=12
 
  120 DIM X(N): DIM Y(N): DIM G(N)
- 130 DIM U(K): DIM V(K)          : REM centroides (minutos,mensajes)
+ 130 DIM U(K): DIM V(K): REM centroides (minutos,mensajes)
  140 DIM S(K): DIM T(K): DIM C(K): REM sumas y conteos
 
  150 REM ----- PARAMETROS DE ESCALA PARA PLOT -----
