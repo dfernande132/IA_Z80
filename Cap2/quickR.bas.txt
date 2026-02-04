@@ -1,6 +1,6 @@
 10 REM --- LABORATORIO DE RENDIMIENTO: QUICK SORT ROBUSTO ---
 15 RUN AT 3: REM Ponemos el Z80 a 28 MHz.
-20  LET n = 50
+20  LET n = 300
 30  DIM a(n)
 40  REM LLAMAMOS A LA FUNCION QUE NOS GENERA NUMEROS ALEATORIOS
 50  PROC genRand(n)
@@ -41,7 +41,7 @@
 5130     LET lo = L(top)
 5140     LET hi = H(top)
 5150     LET top = top - 1
-5160     REM --- Particionado iterativo hasta que el tramo sea pequeño ---
+5160     REM Particionado iterativo hasta que el tramo sea pequeño 
 5170     REPEAT : WHILE (hi - lo + 1) > THRESH
 5180       LET mid = INT((lo + hi) / 2)
 5190       REM --- Mediana de tres (deja a(lo) <= a(mid) <= a(hi)) ---
@@ -65,25 +65,25 @@
 5360         IF i <= j THEN LET t=a(i): LET a(i)=a(j): LET a(j)=t: LET i=i+1: LET j=j-1
 5370       REPEAT UNTIL 0
 
-5380       REM --- Elegir qué tramo apilar: apila el grande, sigue con el pequeño ---
+5380       REM Elegir que tramo apilar
 5390       LET leftSize  = j - lo + 1
 5400       LET rightSize = hi - i + 1
 5410       IF leftSize < rightSize THEN GO TO 5500
 
-5420       REM (ELSE) apilar izquierda si existe, seguir con derecha (lo=i)
+5420       REM apilar izquierda si existe, seguir con derecha (lo=i)
 5430       IF lo < j THEN LET top=top+1: LET L(top)=lo: LET H(top)=j
 5440       IF top > MAXSTACK THEN PRINT "ERROR: pila agotada.": STOP
 5450       LET lo = i
 5460       GO TO 5550
 
-5500       REM (THEN) apilar derecha si existe, seguir con izquierda (hi=j)
+5500       REM apilar derecha si existe, seguir con izquierda (hi=j)
 5510       IF i < hi THEN LET top=top+1: LET L(top)=i: LET H(top)=hi
 5520       IF top > MAXSTACK THEN PRINT "ERROR: pila agotada.": STOP
 5530       LET hi = j
 
 5550     REPEAT UNTIL 0
 
-5560     REM --- Remate con inserción en el tramo pequeño [lo..hi] ---
+5560     REM Remate con inserción en el tramo pequeño [lo..hi]
 5570     FOR k = lo + 1 TO hi
 5580       LET key = a(k)
 5590       LET m = k - 1

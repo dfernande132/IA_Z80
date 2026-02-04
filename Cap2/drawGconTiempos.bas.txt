@@ -12,7 +12,8 @@
 100 PROC drawG(nvars,npts,ymax)
 110 PAUSE 0: STOP
 
-1000   REM --- Procedimiento para dibujar tres curvas ---
+1000 REM --- Procedimiento para dibujar tres curvas ---
+
 1010   DEFPROC drawG(nvars,npts,ymax)
 1020   LOCAL i,stepx,scaley
 1030   LOCAL xax,yax,x0,y0,xspan,yspan
@@ -43,9 +44,9 @@
 1270   IF npts < 2 THEN LET stepx=0
 1280   IF npts >= 2 THEN LET stepx=xspan/(npts-1)
 
-1290   REM =========================================================
-1300   REM Curva 1: a1()  (INK 1)
-1310   REM =========================================================
+1290   REM ================================================
+1300   REM Curva 1: a1()  
+1310   REM ================================================
 1320   INK 1
 1330   LET x1=x0
 1340   LET y1=y0+a1(1)*scaley
@@ -56,12 +57,12 @@
 1390     DRAW x2-x1,y2-y1
 1400     LET x1=x2: LET y1=y2
 1410   NEXT i
-1420   IF nvars < 2 THEN GO TO 1670
+1420   IF nvars < 2 THEN GO TO 1700
 
-1430   REM =========================================================
-1440   REM Curva 2: a2()  (INK 3)
-1450   REM =========================================================
-1460   INK 1
+1430   REM ================================================
+1440   REM Curva 2: a2()  
+1450   REM ================================================
+1460   INK 3
 1470   LET x1=x0
 1480   LET y1=y0+a2(1)*scaley
 1490   PLOT x1,y1
@@ -71,12 +72,12 @@
 1530     DRAW x2-x1,y2-y1
 1540     LET x1=x2: LET y1=y2
 1550   NEXT i
-1560 IF nvars < 3 THEN GO TO 1670
+1560 IF nvars < 3 THEN GO TO 1700
 
-1570   REM =========================================================
-1580   REM Curva 3: a3()  (INK 5)
-1590   REM =========================================================
-1600   INK 1
+1570   REM ================================================
+1580   REM Curva 3: a3() 
+1590   REM ================================================
+1600   INK 5
 1610   LET x1=x0
 1620   LET y1=y0+a3(1)*scaley
 1630   PLOT x1,y1

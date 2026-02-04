@@ -26,7 +26,7 @@
 
 4000 DEFPROC shellSort(n)
 4010   LOCAL g, i, j, t
-4020   LET g = INT(n / 2): REM Definir el salto inicial (gap)
+4020   LET g = INT(n / 2): REM Definir el salto inicial
 4030   REPEAT : WHILE g > 0
 4040     FOR i = g + 1 TO n
 4050       LET t = a(i)
