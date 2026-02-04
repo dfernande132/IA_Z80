@@ -17,18 +17,18 @@
 
  1000 REM --- CARGA OPTIMIZADA ---
  1070 LET nPat=11: LET nFb=4
- 1140 DIM p$(nPat,30): DIM lPat(nPat): DIM r$(nPat,2,80): DIM rCnt(nPat): DIM fb$(nFb,60)
- 1180 RESTORE 9000: FOR p=1 TO nPat: READ pre$,r1$,r2$
- 1205 LET t$=pre$: GO SUB 8000: LET p$(p)=a$: LET lPat(p)=LEN a$
- 1210 LET rCnt(p)=2: LET r$(p,1)=r1$: LET r$(p,2)=r2$
+ 1140 DIM p$(nPat,30): DIM h(nPat): DIM r$(nPat,2,80): DIM j(nPat): DIM b$(nFb,60)
+ 1180 RESTORE 9000: FOR p=1 TO nPat: READ d$,e$,g$
+ 1205 LET t$=d$: GO SUB 8000: LET p$(p)=a$: LET h(p)=LEN a$
+ 1210 LET j(p)=2: LET r$(p,1)=e$: LET r$(p,2)=g$
  1250 NEXT p
- 1270 RESTORE 9200: FOR i=1 TO nFb: READ f$: LET fb$(i)=f$: NEXT i: RETURN
+ 1270 RESTORE 9200: FOR i=1 TO nFb: READ f$: LET b$(i)=f$: NEXT i: RETURN
  
  2000 REM --- BUSCA SUBCADENA ---
- 2050 LET pos=0: LET lh=LEN hay$: LET ld=LEN need$
+ 2050 LET pos=0: LET lh=LEN k$: LET ld=LEN l$
  2070 IF ld=0 THEN LET pos=1: RETURN
  2080 IF ld>lh THEN RETURN
- 2090 FOR i=1 TO lh-ld+1: IF hay$(i TO i+ld-1)=need$ THEN LET pos=i: LET i=lh
+ 2090 FOR i=1 TO lh-ld+1: IF k$(i TO i+ld-1)=l$ THEN LET pos=i: LET i=lh
  2110 NEXT i: RETURN
  
  3000 REM --- NORMALIZA ---
@@ -44,51 +44,51 @@
  3250 RETURN
  
  4000 REM --- PROCESADO ---
- 4050 LET sp2$=" "+s$+" ": LET found=0
+ 4050 LET m$=" "+s$+" ": LET found=0
  4070 FOR p=1 TO nPat
- 4075 LET lt=lPat(p): IF lt=0 THEN GO TO 4160
- 4080 LET need$=p$(p)(1 TO lt)
- 4100 FOR i=1 TO LEN sp2$ - lt + 1
- 4110 IF sp2$(i TO i+lt-1)=need$ THEN LET pos=i: LET found=1: GO TO 4180
+ 4075 LET lt=h(p): IF lt=0 THEN GO TO 4160
+ 4080 LET l$=p$(p, 1 TO lt)
+ 4100 FOR i=1 TO LEN m$ - lt + 1
+ 4110 IF m$(i TO i+lt-1)=l$ THEN LET pos=i: LET found=1: GO TO 4180
  4120 NEXT i
  4160 NEXT p
  4170 IF found=0 THEN GO SUB 7000: RETURN : REM RESPUESTA FALLBACK
- 4180 LET cap$=sp2$(pos+lt TO LEN sp2$)
- 4210 IF LEN cap$>0 THEN IF cap$(1)=" " THEN LET cap$=cap$(2 TO LEN cap$): GO TO 4210
- 4220 IF LEN cap$>0 THEN IF cap$(LEN cap$)=" " THEN LET cap$=cap$(1 TO LEN cap$-1): GO TO 4220
+ 4180 LET n$=m$(pos+lt TO LEN m$)
+ 4210 IF LEN n$>0 THEN IF n$(1)=" " THEN LET n$=n$(2 TO LEN n$): GO TO 4210
+ 4220 IF LEN n$>0 THEN IF n$(LEN n$)=" " THEN LET n$=n$(1 TO LEN n$-1): GO TO 4220
  4570 GO SUB 5000: REM CAMBIAR PERSONA
- 4580 LET ri=1+INT(RND*rCnt(p)): LET t$=r$(p,ri): GO SUB 6000
+ 4580 LET ri=1+INT(RND*j(p)): LET t$=r$(p,ri): GO SUB 6000
  4590 RETURN
 
  5000 REM --- CAMBIO PERSONA ---
- 5030 LET cap2$="": LET tmp$=cap$+" ": LET w$="": LET i=1
- 5060 IF i>LEN tmp$ THEN GO TO 5510
- 5070 LET c$=tmp$(i): IF c$<>" " THEN LET w$=w$+c$: LET i=i+1: GO TO 5060
+ 5030 LET v$="": LET n$="": LET o$=n$+" ": LET w$="": LET i=1
+ 5060 IF i>LEN o$ THEN GO TO 5510
+ 5070 LET c$=o$(i): IF c$<>" " THEN LET w$=w$+c$: LET i=i+1: GO TO 5060
  5110 IF w$="" THEN LET i=i+1: GO TO 5060
- 5130 LET w2$=w$
+ 5130 LET q$=w$
 
- 5140 IF w$="YO" THEN LET w2$="TU": GO TO 5500
- 5150 IF w$="MI" THEN LET w2$="TU": GO TO 5500
- 5160 IF w$="ME" THEN LET w2$="TE": GO TO 5500
- 5170 IF w$="CONMIGO" THEN LET w2$="CONTIGO": GO TO 5500
- 5180 IF w$="QUIERO" THEN LET w2$="QUIERES": GO TO 5500
- 5190 IF w$="TU" THEN LET w2$="MI": GO TO 5500
- 5200 IF w$="TE" THEN LET w2$="ME": GO TO 5500
- 5210 IF w$="CONTIGO" THEN LET w2$="CONMIGO": GO TO 5500
+ 5140 IF w$="YO" THEN LET q$="TU": GO TO 5500
+ 5150 IF w$="MI" THEN LET q$="TU": GO TO 5500
+ 5160 IF w$="ME" THEN LET q$="TE": GO TO 5500
+ 5170 IF w$="CONMIGO" THEN LET q$="CONTIGO": GO TO 5500
+ 5180 IF w$="QUIERO" THEN LET q$="QUIERES": GO TO 5500
+ 5190 IF w$="TU" THEN LET q$="MI": GO TO 5500
+ 5200 IF w$="TE" THEN LET q$="ME": GO TO 5500
+ 5210 IF w$="CONTIGO" THEN LET q$="CONMIGO": GO TO 5500
 
- 5500 LET cap2$=cap2$+w2$+" ": LET w$="": LET i=1+i: GO TO 5060
- 5510 IF LEN cap2$>0 THEN IF cap2$(LEN cap2$)=" " THEN LET cap2$=cap2$(1 TO LEN cap2$-1): GO TO 5510
+ 5500 LET v$=v$+q$+" ": LET w$="": LET i=1+i: GO TO 5060
+ 5510 IF LEN v$>0 THEN IF v$(LEN v$)=" " THEN LET v$=v$(1 TO LEN v$-1): GO TO 5510
  5550 RETURN
 
  6000 REM --- INSERTAR ---
  6010 LET t$=t$: GO SUB 8000: LET t$=a$
- 6030 LET hay$=t$: LET need$="*": GO SUB 2000
+ 6030 LET k$=t$: LET l$="*": GO SUB 2000
  6040 IF pos=0 THEN LET a$=t$: RETURN
- 6050 IF cap2$="" THEN LET cap2$="ESO"
- 6060 LET a$=t$(1 TO pos-1)+cap2$+t$(pos+1 TO LEN t$): RETURN
+ 6050 IF v$="" THEN LET v$="ESO"
+ 6060 LET a$=t$(1 TO pos-1)+v$+t$(pos+1 TO LEN t$): RETURN
 
  7000 REM --- FALLBACK ---
- 7030 LET fi=1+ INT ( RND *nFb): LET a$=fb$(fi): RETURN
+ 7030 LET fi=1+ INT ( RND *nFb): LET a$=b$(fi): RETURN
 
  8000 REM --- TRIM T$ -> A$ ---
  8010 LET a$=t$
