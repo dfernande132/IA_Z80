@@ -51,14 +51,18 @@ Estos archivos se comparten para que quienes han adquirido el libro puedan reali
 * **Capítulo 9 (Clustering)**: `k-means.bas` y `clasificacion.bas` (Agrupamiento de datos).
 
 ### Parte V: Redes Neuronales
-* **Capítulo 10 (El Perceptrón)**: `elOjoDeLaMaquina.bas` (Reconocimiento de formas con una neurona).
-* **Capítulo 11 (Redes Multicapa)**: 
+* **Capítulo 10 (El Perceptrón)**: 
+    * `elOjoDeLaMaquina.bas` (Reconocimiento de formas con una neurona).
+    * `vemosCincos.bas` (Reconocimiento del dígito 5).
+* **Capítulo 11 (Redes Multicapa)**:
+    * `sigmoide.bas` (Calculo de LUT de la sigmoide).  
     * `multiClase.bas` (Sistemas multicapa).
     * `entrenamientoDigitos.bas` y `visor.bas` (Backpropagation en 8 bits).
-    * `predictor.bas` (Reconocedor de dígitos manuscritos en tiempo real).
+    * `predDigiFILE.bas` (Reconocedor de dígitos con carga del modelo desde fichero).
+    * `predDigiDATA.bas` (Reconocedor de dígitos con carga del modelo desde DATA).
 
 ### Parte VI: Simulación y Vida
-* **Capítulo 12**: `vida.bas` (El Juego de la Vida de Conway).
+* **Capítulo 12**: `JuegoVida` (El Juego de la Vida de Conway).
 
 ---
 
