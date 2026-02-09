@@ -5,7 +5,6 @@
 30 REM  C LIMPIA, R RANDOM, E EDIT, X SALIR
 35 REM ==========================================
 
-40 REM RUN AT 3
 45 LET N=20
 
 46 REM --- CADENA PARA MARCO (20 GUIONES) ---
