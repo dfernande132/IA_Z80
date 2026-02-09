@@ -2,7 +2,7 @@
 20 REM  ENTRENADOR RED 36-12-10 (DIGITOS 6x6)
 30 REM  SIGMOIDE POR LUT (DATA) + BACKPROP
 35 REM ==========================================
-40 REM RUN AT 3
+
 42 LET tinicio= PEEK 23672 + 256*PEEK 23673 + 65536*PEEK 23674
 45 INK 3:PRINT "== ENTRENAMIENTO RED 36-12-10 =="
 47 PRINT "================================" : INK 0
