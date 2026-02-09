@@ -2,13 +2,12 @@
   20 REM REGRESION LINEAL CON DATOS REALES (CO2 NOAA MENSUAL)
   30 REM Ventana temporal: INI..FIN (meses dentro del array)
   40 REM Dibuja puntos y linea de tendencia y muestra ecuacion
-  50 REM Y() guarda CO2*10 (decimas de ppm) como ENTERO
   60 REM ===================================================
 
   70 RANDOMIZE
-  80 LET N=814             : REM total de muestras en DATA
+  80 LET N=814            
   90 DIM Y(N)
-  95 LET YSCALE=100    REM DATA parece CO2*100 (centésimas de ppm)
+  95 LET YSCALE=100  
   
  100 REM ---- Ventana de analisis (cambia estos valores) ----
  110 LET INI=1
@@ -79,7 +78,7 @@
 3090   IF Y(I)>DMAX THEN LET DMAX=Y(I)
 3100 NEXT I
 
-3110 REM margen visual (~5%)
+3110 REM margen visual 
 3120 LET YM=INT((DMAX-DMIN)/20)
 3130 LET DMIN=DMIN-YM
 3140 LET DMAX=DMAX+YM
@@ -92,7 +91,7 @@
 3175 PLOT X0,Y0: DRAW X1-X0,0
 3180 PLOT X0,Y0: DRAW 0,Y1-Y0
 
-3190 REM ---- DIBUJAR PUNTOS (escalados a la caja) ----
+3190 REM ---- DIBUJAR PUNTOS  ----
 3200 INK 0
 3210 LET W=X1-X0
 3215 LET H=Y1-Y0
@@ -105,12 +104,12 @@
 3280   PLOT XPIX,YPIX
 3290 NEXT K
 
-3300 REM ---- DIBUJAR RECTA DE TENDENCIA con 2 puntos + clipping ----
+3300 REM ---- DIBUJAR RECTA DE TENDENCIA ----
 3310 INK 2
 3320 REM extremos en x=1 y x=M (bordes verticales de la caja)
 3330 LET XPA=X0: LET XPB=X1
 
-3340 REM y en ppm -> convertir a unidades enteras Y() (CO2*YSCALE)
+3340 REM y en ppm -> convertir (CO2*YSCALE)
 3350 LET YRA=(A*1 + B)*YSCALE
 3360 LET YRB=(A*M + B)*YSCALE
 
@@ -118,16 +117,16 @@
 3380 LET YPA=Y0+INT((YRA-DMIN)*H/(DMAX-DMIN)+0.5)
 3390 LET YPB=Y0+INT((YRB-DMIN)*H/(DMAX-DMIN)+0.5)
 
-3400 REM --- CLIPPING solo contra Y0..Y1 (x ya está en bordes) ---
+3400 REM --- CLIPPING solo contra Y0..Y1 (x ya en bordes) ---
 3410 LET DX=XPB-XPA
 3420 LET DY=YPB-YPA
 3430 IF DY=0 THEN GO TO 3490
 
-3440 REM si A está fuera por abajo/arriba, recorta A
+3440 REM si A  fuera por abajo/arriba, recorta A
 3450 IF YPA<Y0 THEN LET T=(Y0-YPA)/DY: LET XPA=XPA+T*DX: LET YPA=Y0
 3460 IF YPA>Y1 THEN LET T=(Y1-YPA)/DY: LET XPA=XPA+T*DX: LET YPA=Y1
 
-3470 REM si B está fuera por abajo/arriba, recorta B
+3470 REM si B  fuera por abajo/arriba, recorta B
 3480 IF YPB<Y0 THEN LET T=(Y0-YPB)/(-DY): LET XPB=XPB-T*DX: LET YPB=Y0
 3485 IF YPB>Y1 THEN LET T=(Y1-YPB)/(-DY): LET XPB=XPB-T*DX: LET YPB=Y1
 
