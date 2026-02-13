@@ -17,7 +17,7 @@
  150   READ M(I),F(I),V(I),C(I)
  160 NEXT I
 
- 170 CLS: ink 0
+ 170 CLS: INK 0
  180 PRINT "ALGORITMO k-NN":PRINT "MAGO / GUERRERO / EXPLORADOR"
  190 PRINT "K=";K;"(K impar para evitar empates)"
  200 PRINT
@@ -33,7 +33,7 @@
  280 IF QV<0 THEN LET QV=0
  290 IF QV>100 THEN LET QV=100
 
- 300 REM ---- Inicializar 'mejores K' con infinito ----
+ 300 REM ---- Inicializar mejores K con infinito ----
  310 FOR J=1 TO K
  320   LET D(J)=999999
  330   LET E(J)=0
@@ -68,7 +68,7 @@
  580 IF VG>BEST THEN LET BEST=VG: LET WIN=2
  590 IF VE>BEST THEN LET BEST=VE: LET WIN=3
 
- 600 REM ---- Resolver empate (si ocurre) usando el vecino mas cercano ----
+ 600 REM ---- Resolver empate usando el vecino mas cercano ----
  610 LET TIE=0
  620 IF WIN=1 AND VG=BEST THEN LET TIE=1
  630 IF WIN=1 AND VE=BEST THEN LET TIE=1
@@ -104,7 +104,7 @@
 8999 REM ============================================
 9000 REM DATA: (MAGIA, FUERZA, VELOCIDAD, CLASE)
 9010 REM 1=MAGO 2=GUERRERO 3=EXPLORADOR
-9020 REM Rango sugerido 0..100
+9020 REM Rango  0..100
 9030 REM ============================================
 
 9040 REM --- MAGOS  ---
