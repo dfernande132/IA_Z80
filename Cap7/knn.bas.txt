@@ -88,7 +88,7 @@
 
  720 PRINT: INK 1
  730 PRINT "Prueba cambiando K o el dataset."
- 740 PAUSE(0): STOP
+ 740 PAUSE 0: STOP
 
 1999 REM ============================================
 2000 REM Empate: elegir la clase del vecino mas cercano
