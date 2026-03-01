@@ -1,6 +1,5 @@
-Inteligencia Artificial para el Z80
-"Si puedes construirlo en 8 bits, realmente lo entiendes"
+JuegoVida Bonus
 
-Este repositorio contiene los programas y recursos del libro "Inteligencia Artificial para el Z80: La ciencia de la computación en BASIC", escrito por José Daniel Fernández Santos.
+Se ha añadido una versión extendida del Juego de la Vida, denominada JuegoVida Bonus, que incorpora los patrones clásicos descritos en el libro de John H. Conway para facilitar su ejecución y experimentación.
 
-Aquí encontrarás el código fuente diseñado para ZX Spectrum (clásico y Next) que permite explorar desde los fundamentos de la computación hasta las redes neuronales modernas, todo bajo la arquitectura del mítico procesador Zilog Z80.
+Esta versión incluye una colección de configuraciones iniciales icónicas —como gliders, oscillators, spaceships y otros patrones complejos— que pueden cargarse y simularse directamente. El objetivo es proporcionar un entorno más completo para estudiar el comportamiento emergente de los autómatas celulares y reproducir fácilmente los patrones más conocidos.
